@@ -1,0 +1,29 @@
+@import '../../variables'
+
+.btn
+  border: none
+  outline: none
+  background-color: transparent
+  border-radius: 8px
+  padding: 7px 14px
+  font-size: 18px
+  color: $light-text
+  cursor: pointer
+  transition: .2s
+  &-leave
+    background-color: #c62828
+    border: 1px solid #b71c1c
+    transform: scale(1)
+    transition: .2s
+    color: $light-theme
+    &:hover
+      transform: scale(1.1)
+  &-cross
+    border: 1px solid $light-text
+    padding: 3px 8px
+    color: $dark-theme
+    border: 1px solid $dark-theme
+    margin: 8px
+    &:hover
+      background-color: $dark-theme
+      color: $light-theme

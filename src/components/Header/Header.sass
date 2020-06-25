@@ -1,0 +1,80 @@
+@import '../../variables'
+  
+.header
+  position: fixed
+  height: 80px
+  width: 100%
+  display: flex
+  justify-content: space-between
+  align-items: center
+  background: $light-theme
+  font-size: 22px
+  padding: 0 30px
+  box-shadow: 1px 1px 8px darken($light-theme, 15%)
+  .role
+    text-transform: capitalize
+    background-color: $active
+    padding: 8px 15px
+    letter-spacing: 1px
+    border-radius: 20px
+    font-family: 'Slabo 13px', serif
+  .nav
+    display: flex
+    list-style: none
+    &__item
+      margin-right: 80px
+      text-align: center
+      &:first-child
+        margin-left: 15px
+      &:last-child
+        margin-right: 15px
+    &__link
+      position: relative
+      text-decoration: none
+      color: $light-text
+      transition: .2s
+  .settings
+    display: flex
+    align-items: center
+    padding: 14px
+    cursor: pointer
+    border: 1px solid $light-text
+    border-radius: 14px
+    color: $light-text
+    transition: .2s
+    font-size: 18px
+    background-color: transparent
+    outline: none
+    &:hover
+      color: $dark-theme
+      border: 1px solid $dark-theme
+      background-color: lighten($active, 15%)
+
+.nav__link
+  &::before
+    content: ''
+    position: absolute
+    bottom: -5px
+    width: 100%
+    transform: scale(0)
+    height: 2px
+    background-color: $active
+    transition: .2s ease-in
+    word-wrap: none
+  &:hover
+    color: $dark-theme
+    &::before
+      transform: scale(1.1)
+
+.nav__link.nav__link-active
+  color: $dark-theme
+
+.nav__link-active
+  &::before
+    content: ''
+    position: absolute
+    bottom: -5px
+    transform: scale(1.1)
+    width: 100%
+    height: 2px
+    background-color: $active
