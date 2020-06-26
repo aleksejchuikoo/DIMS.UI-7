@@ -2,7 +2,7 @@ import React from 'react';
 import './Header.sass';
 import { NavLink } from 'react-router-dom';
 
-export default function Header() {
+export default function Header(props) {
   return (
     <div className='header'>
       <div className='role'>Admin</div>
@@ -29,7 +29,7 @@ export default function Header() {
         </li>
       </ul>
       <div>
-        <button className='settings'>
+        <button className='settings' onClick={props.showModal}>
           <i className='fa fa-cogs'></i>
         </button>
       </div>

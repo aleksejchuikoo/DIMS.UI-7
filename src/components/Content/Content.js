@@ -9,10 +9,9 @@ import { Route } from 'react-router-dom';
 export default class Content extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      name: 'aleksejasfasf',
-    };
+    this.state = {};
   }
+
   render() {
     return (
       <div className='content'>

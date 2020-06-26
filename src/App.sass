@@ -11,4 +11,26 @@
   height: 100vh
   width: 100%
   font-family: 'Slabo 27px', serif
+  transition: .5s
 
+/*---------------SWITCH COLOR----------------*/
+
+.App.theme-dark
+  background-color: $bg-dark
+  .header
+    background-color: $bg-darkHeader
+    color: $dark-theme-text
+    box-shadow: 1px 1px 8px darken(#cfcfcf, 4%)
+    .nav__link
+      color: $dark-theme-text
+    .settings:hover
+      border: 1px solid $dark-theme-text
+      color: lighten($dark-theme-text, 15%)
+      background-color: lighten($bg-dark, 10%)
+  .content
+    background-color: lighten($bg-dark, 15%)
+  .footer
+    background-color: $bg-darkFooter
+    color: $dark-theme-text
+    box-shadow: -1px -1px 8px darken(#cfcfcf, 4%)
+/*---------------SWITCH COLOR----------------*/

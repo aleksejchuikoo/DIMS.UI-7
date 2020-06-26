@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
-import { CrossButton, Button } from '../../UI/Buttons';
+import { CrossButton, Button, CheckboxButton } from '../../UI/Buttons';
 import './Modal.sass';
 
 export default class HeaderModal extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    const { handleButton, handleChechbox, isDark, isOpen } = this.props;
+
     return (
-      <div className='headerModalOverlay'>
-        <div className='headerModal'>
+      <div className='headerModalOverlay' style={isOpen ? { display: 'flex' } : { display: 'none' }}>
+        <div className={`headerModal ${isDark ? 'theme-dark' : ''}`}>
           <div className='headerModal__header'>
             <div className='headerModal__header-title'>Settings</div>
             <div className='headerModal__header-close'>
-              <CrossButton>&times;</CrossButton>
+              <CrossButton handleButton={handleButton}>&times;</CrossButton>
             </div>
           </div>
-          <div className='headerModal__body'></div>
+          <div className='headerModal__body'>
+            <span>Dark theme</span>
+            <CheckboxButton isActive={isDark} handleChechbox={handleChechbox} />
+          </div>
           <div className='headerModal__footer'>
             <Button action='leave'>Log out</Button>
           </div>
