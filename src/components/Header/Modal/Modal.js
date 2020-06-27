@@ -3,10 +3,6 @@ import { CrossButton, Button, CheckboxButton } from '../../UI/Buttons';
 import './Modal.sass';
 
 export default class HeaderModal extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { handleButton, handleChechbox, isDark, isOpen } = this.props;
 

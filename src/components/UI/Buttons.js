@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Buttons.sass';
 
 export function CrossButton(props) {
@@ -25,4 +25,49 @@ export function CheckboxButton(props) {
       </div>
     </div>
   );
+}
+
+export class RadioButtons extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: '',
+    };
+  }
+
+  handleRadioChange = (e) => {
+    this.setState({
+      value: e.target.value,
+    });
+  };
+
+  render() {
+    return (
+      <div className='radio-group'>
+        <label className='radio'>
+          <input
+            type='radio'
+            value='male'
+            name='gender'
+            checked={this.state.value === 'male'}
+            onChange={this.handleRadioChange}
+          />{' '}
+          male
+          <span></span>
+        </label>
+        <label className='radio'>
+          <input
+            type='radio'
+            value='female'
+            name='gender'
+            checked={this.state.value === 'female'}
+            onChange={this.handleRadioChange}
+          />{' '}
+          female
+          <span></span>
+        </label>
+      </div>
+    );
+  }
 }
