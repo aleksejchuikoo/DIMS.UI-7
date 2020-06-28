@@ -14,9 +14,9 @@
     &:hover, &:focus
       border: 1px solid darken($bg-form, 55%)
   &_title
-    margin: 10px 0 25px 75px
     color: $dark-theme
     letter-spacing: 1px
+    margin: 10px 0 25px 70px
   &_wrapper
     display: flex
     padding: 0 60px
@@ -67,6 +67,16 @@
     background-color: $bg-form
     color: darken($bg-form, 75%)
 
+.newUser__form_wrapper:nth-child(2) 
+  .newUser__form_wrapper-inner:nth-child(2)
+    .newUser__form_row
+      display: flex
+      align-items: center
+      .newUser__form_wrapper-label
+        width: 110px
+      .newUser__form_wrapper-input
+        flex: 1
+
 .newUser__form_wrapper:nth-child(3)
   .newUser__form_wrapper-inner
     display: flex
@@ -103,6 +113,9 @@
        margin-right: 6px
       input
         margin-right: 15px
+  .newUser__form_wrapper-inner:nth-child(3)
+    label
+      margin-right: 18px
 
 .newUser__form_wrapper:nth-child(5)
   input

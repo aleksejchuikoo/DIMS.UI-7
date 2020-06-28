@@ -1,0 +1,84 @@
+@import '../../variables'
+
+@mixin styling()
+  background-color: darken($bg-form, 15%)
+  border-radius: 5px
+  border: 1px solid transparent
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)
+  padding: 4px 10px
+
+.dd-wrapper 
+  display: flex
+  min-height: 27px
+  flex-wrap: wrap
+  position: relative
+
+  .dd-header 
+    @include styling()
+    display: flex
+    cursor: pointer
+    width: 100%
+    position: relative
+    justify-content: space-between
+    &:hover
+      border: 1px solid darken($bg-form, 55%)
+    &__title
+      font-size: 14px
+      color: #6f6b6b
+      &.active
+        color: darken($bg-form, 75%)
+        font-size: 15px
+    &__action
+      font-size: 14px
+      color: #6f6b6b
+      &::before
+        content: ''
+        position: absolute
+        right: 10px
+        top: 50%
+        transform: translateY(-50%)
+        width: 0 
+        height: 0 
+        border-left: 5px solid transparent
+        border-right: 5px solid transparent
+        border-top: 5px solid #6f6b6b
+        transform: rotate(0)
+        transition: .2s
+  .dd-list 
+    padding: 0
+    margin: 0
+    width: 100%
+    margin-top: 20px
+    position: absolute
+    bottom: -2px
+    transform: translateY(100%)
+    li 
+      list-style-type: none
+      &:first-of-type 
+        > button 
+          border-top: 1px solid #ccc
+          border-top-left-radius: 4px
+          border-top-right-radius: 4px
+      &:last-of-type > button 
+        border-bottom-left-radius: 4px
+        border-bottom-right-radius: 4px
+      button 
+        display: flex
+        justify-content: space-between
+        background-color: white
+        font-size: 14px
+        padding: 8px 10px
+        border: 0
+        border-bottom: 1px solid #ccc
+        width: 100%
+        text-align: left
+        border-left: 1px solid #ccc
+        border-right: 1px solid #ccc
+        &:hover, &:focus 
+          cursor: pointer
+          font-weight: bold
+          background-color: #ccc
+    
+.dd-header__action.open
+  &::before
+    transform: rotate(180deg)

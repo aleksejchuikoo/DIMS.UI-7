@@ -1,48 +1,91 @@
 import React, { Component } from 'react';
 import './NewUser.sass';
 import { Button, RadioButtons } from '../../UI/Buttons';
+import Dropdown from '../../UI/Dropdown';
+import Date from '../../UI/Date';
+
+const items = [
+  {
+    id: 1,
+    value: 'Java',
+  },
+  {
+    id: 2,
+    value: '.Net',
+  },
+  {
+    id: 3,
+    value: 'React',
+  },
+  {
+    id: 4,
+    value: 'Angular',
+  },
+];
 
 export default class NewUser extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+
+  emailValidator = (e) => {
+    let regEx = /^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]{2,20})(.[a-z]{2,8})$/;
+
+    if (regEx.test()) {
+    }
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   render() {
     return (
       <div className='newUser'>
         <div className='newUser__form_icon'>
           <i className='fa fa-user-plus'></i>
         </div>
-        <form className='newUser__form' noValidate>
+        <form className='newUser__form' onSubmit={this.handleSubmit}>
           <h1 className='newUser__form_title'>Create new user</h1>
           <div className='newUser__form_wrapper'>
             <div className='newUser__form_wrapper-inner'>
               <div className='newUser__form_row'>
-                <input type='text' className='' name='firstname' placeholder='First name' noValidate />
-                <span className='newUser__form_row-error'>Error</span>
+                <input type='text' name='firstname' placeholder='First name' />
+                <span className='newUser__form_row-error'>Max: 20 symbols</span>
               </div>
               <div className='newUser__form_row'>
-                <input type='text' className='' name='lastname' placeholder='Last name' noValidate />
-                <span className='newUser__form_row-error'>Error</span>
-              </div>
-            </div>
-            <div className='newUser__form_wrapper-inner'>
-              <div className='newUser__form_row'>
-                <input type='text' className='' name='education' placeholder='Education' noValidate />
-                <span className='newUser__form_row-error'>Error</span>
-              </div>
-              <div className='newUser__form_row'>
-                <input type='text' className='' name='math-score' placeholder='Math score' noValidate />
-                <span className='newUser__form_row-error'>Error</span>
+                <input type='text' name='lastname' placeholder='Last name' />
+                <span className='newUser__form_row-error'>Max: 20 symbols</span>
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
               <div className='newUser__form_row'>
-                <input type='text' className='' name='direction' placeholder='Direction' noValidate />
+                <div className='newUser__form_wrapper-label'>
+                  <label>Start Date:</label>
+                </div>
+                <div className='newUser__form_wrapper-input'>
+                  <Date placeholder='DD/MM/YYYY' />
+                </div>
+              </div>
+              <span className='newUser__form_row-error'>Error</span>
+              <div className='newUser__form_row'>
+                <div className='newUser__form_wrapper-label'>
+                  <label>CT Math Score:</label>
+                </div>
+                <div className='newUser__form_wrapper-input'>
+                  <input type='number' min='0' max='100' step='1' name='math-score' placeholder='Math score' />
+                </div>
+              </div>
+              <span className='newUser__form_row-error'>Error</span>
+            </div>
+            <div className='newUser__form_wrapper-inner'>
+              <div className='newUser__form_row'>
+                <input type='text' name='education' placeholder='Education' />
                 <span className='newUser__form_row-error'>Error</span>
               </div>
               <div className='newUser__form_row'>
-                <input type='text' className='' name='stard-date' placeholder='Start date' noValidate />
+                <Dropdown title='Direction' items={items} />
                 <span className='newUser__form_row-error'>Error</span>
               </div>
             </div>
@@ -53,7 +96,7 @@ export default class NewUser extends Component {
                 <label>Address:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='text' className='' name='address' noValidate />
+                <input type='text' name='address' />
               </div>
             </div>
           </div>
@@ -63,7 +106,7 @@ export default class NewUser extends Component {
                 <label>Birth date:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='text' className='' name='average-score' noValidate />
+                <Date placeholder='DD/MM/YYYY' />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
@@ -76,7 +119,7 @@ export default class NewUser extends Component {
             </div>
             <div className='newUser__form_wrapper-inner'>
               <label>University average score:</label>
-              <span className='univerScore'></span>
+              <input type='number' min='0' max='10' step='0.1' name='math-score' placeholder='Score' />
             </div>
           </div>
           <div className='newUser__form_wrapper contacts'>
@@ -85,7 +128,7 @@ export default class NewUser extends Component {
                 <label>Email:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='email' className='' name='email' noValidate />
+                <input type='text' name='email' onChange={this.emailValidator} />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
@@ -93,7 +136,7 @@ export default class NewUser extends Component {
                 <label>Skype:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='skype' className='' name='skype' noValidate />
+                <input type='skype' name='skype' />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
@@ -101,7 +144,7 @@ export default class NewUser extends Component {
                 <label>Phone:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='skype' className='' name='phone' noValidate />
+                <input type='skype' name='phone' />
               </div>
             </div>
           </div>
