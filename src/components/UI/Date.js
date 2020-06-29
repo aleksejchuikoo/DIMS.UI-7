@@ -27,6 +27,8 @@ export default class Date extends Component {
           value: val,
         });
       }
+
+      this.props.changeDate(val, this.props.name);
     }
   };
 

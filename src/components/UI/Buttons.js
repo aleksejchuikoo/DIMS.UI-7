@@ -37,9 +37,12 @@ export class RadioButtons extends Component {
   }
 
   handleRadioChange = (e) => {
+    let val = e.target.value;
     this.setState({
       value: e.target.value,
     });
+
+    this.props.changeRadio(val, this.props.name);
   };
 
   render() {

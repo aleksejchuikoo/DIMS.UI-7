@@ -1,0 +1,68 @@
+@import "../../../variables"
+
+.users__title
+  display: flex
+  align-items: center
+  border-top-left-radius: 10px
+  border-top-right-radius: 10px
+  border-bottom: 1px solid darken($bg-form, 10%)
+  max-width: 1030px
+  margin: 10px auto 0 auto
+  background-color: darken($bg-form, 15%)
+  &-name
+    text-align: center
+    padding: 12px 0
+    flex: 1
+    border-right: 1px solid darken($bg-form, 10%)
+    color: $dark-theme
+    letter-spacing: 1px
+    font-weight: bold
+    text-transform: capitalize
+    &:last-child
+      border: none
+      flex: 2
+.users__wrapper
+  display: flex
+  align-items: center
+  border-bottom: 1px solid darken($bg-form, 10%)
+  max-width: 1030px
+  margin: 0 auto
+  background-color: $bg-form
+  &_column
+    display: flex
+    flex-direction: column
+    padding: 8px 35px
+    width: 100%
+  &_row
+    display: flex
+    justify-content: space-between
+    &:first-child
+      margin-bottom: 10px
+  &:last-child
+    border-bottom-left-radius: 10px
+    border-bottom-right-radius: 10px
+    margin-bottom: 70px
+  &_item
+    display: flex
+    align-items: center
+    justify-content: center
+    flex: 1
+    min-height: 80px
+    border-right: 1px solid darken($bg-form, 10%)
+    color: $dark-theme
+    letter-spacing: 1px
+    text-transform: capitalize
+    &:last-child
+      border: none
+      flex: 2
+
+.userInfo
+  border: none
+  outline: none
+  background-color: transparent
+  cursor: pointer
+  margin: 0
+  padding: 0
+  color: inherit
+  font: inherit
+  text-decoration: underline

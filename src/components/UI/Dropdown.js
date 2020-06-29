@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Dropdown.sass';
 
-export default function Dropdown({ title, items = [] }) {
+export default function Dropdown({ title, items = [], handlerDropdown, name }) {
   const [open, setOpen] = useState(false);
   const [selection, setSelection] = useState('');
 
@@ -10,6 +10,8 @@ export default function Dropdown({ title, items = [] }) {
   function handleOnClick(item) {
     setOpen(!open);
     setSelection(item.value);
+
+    handlerDropdown(item.value, name);
   }
 
   return (
@@ -22,7 +24,7 @@ export default function Dropdown({ title, items = [] }) {
         <ul className='dd-list'>
           {items.map((item) => (
             <li className='dd-list__item' key={item.id}>
-              <button type='button' onClick={() => handleOnClick(item)}>
+              <button type='button' name='direction' onClick={() => handleOnClick(item)}>
                 <span>{item.value}</span>
               </button>
             </li>

@@ -26,21 +26,69 @@ const items = [
 export default class NewUser extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+
+    this.state = {
+      firstName: '',
+      lastName: '',
+      startDate: '',
+      mathScore: '',
+      education: '',
+      direction: '',
+      address: '',
+      birthday: '',
+      sex: '',
+      university: '',
+      email: '',
+      skype: '',
+      phone: '',
+      error: false,
+    };
   }
 
   emailValidator = (e) => {
-    let regEx = /^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+).([a-z]{2,20})(.[a-z]{2,8})$/;
+    let val = e.target.value;
 
-    if (regEx.test()) {
-    }
+    this.setState({
+      email: val,
+    });
+    console.log(e.target.value, e.target.name);
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const data = this.state;
+    console.log(data);
+
+    this.props.transferData(data);
+  };
+
+  handleInputChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  handleComponent = (val, name) => {
+    this.setState({
+      [name]: val,
+    });
   };
 
   render() {
+    const {
+      firstName,
+      lastName,
+      mathScore,
+      education,
+      direction,
+      address,
+      sex,
+      university,
+      email,
+      skype,
+      phone,
+    } = this.state;
+
     return (
       <div className='newUser'>
         <div className='newUser__form_icon'>
@@ -51,11 +99,23 @@ export default class NewUser extends Component {
           <div className='newUser__form_wrapper'>
             <div className='newUser__form_wrapper-inner'>
               <div className='newUser__form_row'>
-                <input type='text' name='firstname' placeholder='First name' />
+                <input
+                  type='text'
+                  name='firstName'
+                  placeholder='First name'
+                  value={firstName}
+                  onChange={this.handleInputChange}
+                />
                 <span className='newUser__form_row-error'>Max: 20 symbols</span>
               </div>
               <div className='newUser__form_row'>
-                <input type='text' name='lastname' placeholder='Last name' />
+                <input
+                  type='text'
+                  name='lastName'
+                  placeholder='Last name'
+                  value={lastName}
+                  onChange={this.handleInputChange}
+                />
                 <span className='newUser__form_row-error'>Max: 20 symbols</span>
               </div>
             </div>
@@ -65,7 +125,7 @@ export default class NewUser extends Component {
                   <label>Start Date:</label>
                 </div>
                 <div className='newUser__form_wrapper-input'>
-                  <Date placeholder='DD/MM/YYYY' />
+                  <Date placeholder='DD/MM/YYYY' name='startDate' changeDate={this.handleComponent} />
                 </div>
               </div>
               <span className='newUser__form_row-error'>Error</span>
@@ -74,18 +134,39 @@ export default class NewUser extends Component {
                   <label>CT Math Score:</label>
                 </div>
                 <div className='newUser__form_wrapper-input'>
-                  <input type='number' min='0' max='100' step='1' name='math-score' placeholder='Math score' />
+                  <input
+                    type='number'
+                    min='0'
+                    max='100'
+                    step='1'
+                    placeholder='0'
+                    name='mathScore'
+                    value={mathScore}
+                    onChange={this.handleInputChange}
+                  />
                 </div>
               </div>
               <span className='newUser__form_row-error'>Error</span>
             </div>
             <div className='newUser__form_wrapper-inner'>
               <div className='newUser__form_row'>
-                <input type='text' name='education' placeholder='Education' />
+                <input
+                  type='text'
+                  name='education'
+                  placeholder='Education'
+                  value={education}
+                  onChange={this.handleInputChange}
+                />
                 <span className='newUser__form_row-error'>Error</span>
               </div>
               <div className='newUser__form_row'>
-                <Dropdown title='Direction' items={items} />
+                <Dropdown
+                  title='Direction'
+                  items={items}
+                  value={direction}
+                  name='direction'
+                  handlerDropdown={this.handleComponent}
+                />
                 <span className='newUser__form_row-error'>Error</span>
               </div>
             </div>
@@ -96,7 +177,7 @@ export default class NewUser extends Component {
                 <label>Address:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='text' name='address' />
+                <input type='text' name='address' value={address} onChange={this.handleInputChange} />
               </div>
             </div>
           </div>
@@ -106,7 +187,7 @@ export default class NewUser extends Component {
                 <label>Birth date:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <Date placeholder='DD/MM/YYYY' />
+                <Date placeholder='DD/MM/YYYY' name='birthday' changeDate={this.handleComponent} />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
@@ -114,12 +195,21 @@ export default class NewUser extends Component {
                 <label>Sex:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <RadioButtons />
+                <RadioButtons name='sex' value={sex} changeRadio={this.handleComponent} />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
               <label>University average score:</label>
-              <input type='number' min='0' max='10' step='0.1' name='math-score' placeholder='Score' />
+              <input
+                type='number'
+                min='0'
+                max='10'
+                step='0.1'
+                placeholder='0'
+                name='university'
+                value={university}
+                onChange={this.handleInputChange}
+              />
             </div>
           </div>
           <div className='newUser__form_wrapper contacts'>
@@ -128,7 +218,7 @@ export default class NewUser extends Component {
                 <label>Email:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='text' name='email' onChange={this.emailValidator} />
+                <input type='email' name='email' value={email} onChange={this.emailValidator} />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
@@ -136,7 +226,7 @@ export default class NewUser extends Component {
                 <label>Skype:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='skype' name='skype' />
+                <input type='text' name='skype' value={skype} onChange={this.handleInputChange} />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>
@@ -144,7 +234,7 @@ export default class NewUser extends Component {
                 <label>Phone:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <input type='skype' name='phone' />
+                <input type='text' name='phone' value={phone} onChange={this.handleInputChange} />
               </div>
             </div>
           </div>
