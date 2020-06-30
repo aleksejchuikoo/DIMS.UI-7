@@ -5,7 +5,7 @@ export default class Date extends Component {
     super(props);
 
     this.state = {
-      value: '',
+      value: this.props.value,
       error: false,
     };
   }

@@ -5,6 +5,7 @@ import NewUser from './NewUser/NewUser';
 import Tasks from './Tasks/Tasks';
 import NewTask from './NewTask/NewTask';
 import { Route } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Content extends Component {
   constructor(props) {
@@ -12,14 +13,17 @@ export default class Content extends Component {
     this.state = {
       data: [],
     };
+
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleShowProgress = this.handleShowProgress.bind(this);
+    this.handleShowTasks = this.handleShowTasks.bind(this);
   }
 
   transferData = (data) => {
     this.setState({
       data: [...this.state.data, { ...data }],
     });
-
-    console.log(this.state.data);
   };
 
   componentDidMount() {
@@ -39,17 +43,82 @@ export default class Content extends Component {
           email: 'aleksej.chuyko@gmail.com',
           skype: 'Aleksej Chuiko',
           phone: '80295719375',
+          id: uuidv4(),
+        },
+        {
+          firstName: 'Andrey',
+          lastName: 'Chuyko',
+          startDate: '30/06/2020',
+          mathScore: '65',
+          education: 'BNTU',
+          direction: 'Angular',
+          address: 'Minsk region, Ivenec',
+          birthday: '13/07/1996',
+          sex: 'Male',
+          university: '10.0',
+          email: 'andrey.chuyko@gmail.com',
+          skype: 'Andrey Chuiko',
+          phone: '80295719375',
+          id: uuidv4(),
+        },
+        {
+          firstName: 'Aleksandr',
+          lastName: 'Chuyko',
+          startDate: '30/06/2020',
+          mathScore: '74',
+          education: 'BSUIR',
+          direction: 'Java',
+          address: 'Minsk region, Ivenec',
+          birthday: '20/08/1999',
+          sex: 'Male',
+          university: '9.0',
+          email: 'aleksandr.chuyko@gmail.com',
+          skype: 'Aleksandr Chuiko',
+          phone: '80295719375',
+          id: uuidv4(),
         },
       ],
     });
   }
+
+  handleDelete(id) {
+    const { data } = this.state;
+
+    const filteredData = data.filter((item) => id !== item.id);
+
+    this.setState({
+      data: [...filteredData],
+    });
+  }
+
+  handleEdit(event, editData, idData) {
+    event.preventDefault();
+    const { data } = this.state;
+    const selectedItem = data.findIndex((item) => item.id === idData);
+    const firstArr = data.slice(0, selectedItem);
+    const secondArr = data.slice(selectedItem + 1);
+
+    this.setState({
+      data: [...firstArr, editData, ...secondArr],
+    });
+  }
+
+  handleShowProgress() {}
+
+  handleShowTasks() {}
 
   render() {
     const { data } = this.state;
     return (
       <div className='content'>
         <Route path='/users' exact>
-          <Users data={data} />
+          <Users
+            data={data}
+            handleDelete={this.handleDelete}
+            handleEdit={this.handleEdit}
+            handleShowProgress={this.handleShowProgress}
+            handleShowTasks={this.handleShowTasks}
+          />
         </Route>
 
         <Route path='/new-user'>

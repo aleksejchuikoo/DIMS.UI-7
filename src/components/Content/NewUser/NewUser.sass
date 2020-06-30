@@ -63,6 +63,12 @@
     border-radius: 50%
     color: $light-text
 
+.newUser__form-edit
+  top: 100px
+  .fa-edit
+    color: darken($light-text, 45%)
+    border: 5px solid rgba(0,0,0,0.5)
+
 .address, .contacts
   background-color: darken($bg-form, 15%)
   padding: 22px 60px
@@ -129,7 +135,7 @@
   input
     background-color: $bg-form
     color: darken($bg-form, 75%)
-  align-items: center
+    align-items: center
   .newUser__form_wrapper-inner:nth-child(1)
     display: flex
     align-items: center
@@ -164,13 +170,19 @@
   height: 20px
   display: inline-block
   background-color: #fff
+
+.newUser__form-btns
+  display: flex
+  justify-content: flex-end
+  .newUser__form-btn
+    &:first-child
+      margin-right: 30px
+    .btn
+      width: 120px
       
 /*---------------SWITCH COLOR----------------*/
 
 .App.theme-dark
-  .content
-    background-color: lighten($bg-form, 4%)
-    border: 1px solid darken($bg-form, 30%)
   .newUser__form_icon i
     color: $dark-theme
     border: 5px solid rgba(0,0,0,0.5)

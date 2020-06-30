@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './Dropdown.sass';
 
-export default function Dropdown({ title, items = [], handlerDropdown, name }) {
+export default function Dropdown({ title, items = [], handlerDropdown, name, value }) {
   const [open, setOpen] = useState(false);
-  const [selection, setSelection] = useState('');
+  const [selection, setSelection] = useState(value);
 
   const toggle = () => setOpen(!open);
 

@@ -3,15 +3,27 @@ import './Users.sass';
 import { Button } from '../../UI/Buttons';
 import ModalUser from './ModalUser';
 import { useState } from 'react';
+import ModalUserEdit from './ModalUserEdit';
 
-export default function User({ dataUser, id }) {
+export default function User({ dataUser, hash, handleDelete, handleEdit, handleShowProgress, handleShowTasks }) {
   const [isOpen, openModal] = useState(false);
+  const [isOpenEdit, editData] = useState(false);
 
   const showModal = () => {
     if (isOpen) {
       openModal(false);
     } else {
       openModal(true);
+    }
+  };
+
+  const showModalEdit = (e) => {
+    e.preventDefault();
+
+    if (isOpenEdit) {
+      editData(false);
+    } else {
+      editData(true);
     }
   };
 
@@ -38,7 +50,7 @@ export default function User({ dataUser, id }) {
     <>
       <div className='users__wrapper'>
         <div className='users__wrapper_item' style={{ fontWeight: 'bold' }}>
-          {id}
+          {hash}
         </div>
         <div className='users__wrapper_item'>
           <button onClick={showModal} className='userInfo'>
@@ -52,16 +64,25 @@ export default function User({ dataUser, id }) {
         <div className='users__wrapper_item'>
           <div className='users__wrapper_column'>
             <div className='users__wrapper_row'>
-              <Button action='showProgress'>Progress</Button>
-              <Button action='showTasks'>Tasks</Button>
+              <Button action='showTasks' handleButton={handleShowTasks}>
+                Tasks
+              </Button>
+              <Button action='showProgress' handleButton={handleShowProgress}>
+                Progress
+              </Button>
             </div>
             <div className='users__wrapper_row'>
-              <Button action='edit'>Edit</Button>
-              <Button action='delete'>Delete</Button>
+              <Button action='edit' handleButton={showModalEdit}>
+                Edit
+              </Button>
+              <Button action='delete' handleButton={() => handleDelete(dataUser.id)}>
+                Delete
+              </Button>
             </div>
           </div>
         </div>
       </div>
+      <ModalUserEdit dataUser={dataUser} isOpen={isOpenEdit} handleButton={showModalEdit} handleEdit={handleEdit} />
       <ModalUser dataUser={dataUser} isOpen={isOpen} handleButton={showModal} />
     </>
   );

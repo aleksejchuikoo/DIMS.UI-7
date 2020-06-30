@@ -4,7 +4,7 @@ import './Users.sass';
 
 export default class Users extends Component {
   render() {
-    const { data } = this.props;
+    const { data, handleDelete, handleEdit, handleShowProgress, handleShowTasks } = this.props;
     return (
       <div className='users'>
         <div className='users__title'>
@@ -17,7 +17,17 @@ export default class Users extends Component {
           <div className='users__title-name'></div>
         </div>
         {data.map((item, i) => {
-          return <User dataUser={item} key={i} id={i + 1} />;
+          return (
+            <User
+              dataUser={item}
+              key={i}
+              hash={i + 1}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+              handleShowProgress={handleShowProgress}
+              handleShowTasks={handleShowTasks}
+            />
+          );
         })}
       </div>
     );

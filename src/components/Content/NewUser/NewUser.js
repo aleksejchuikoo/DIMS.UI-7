@@ -3,6 +3,7 @@ import './NewUser.sass';
 import { Button, RadioButtons } from '../../UI/Buttons';
 import Dropdown from '../../UI/Dropdown';
 import Date from '../../UI/Date';
+import { v4 as uuidv4 } from 'uuid';
 
 const items = [
   {
@@ -41,6 +42,7 @@ export default class NewUser extends Component {
       email: '',
       skype: '',
       phone: '',
+      id: uuidv4(),
       error: false,
     };
   }
@@ -57,9 +59,26 @@ export default class NewUser extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const data = this.state;
-    console.log(data);
 
     this.props.transferData(data);
+
+    this.setState({
+      firstName: '',
+      lastName: '',
+      startDate: '',
+      mathScore: '',
+      education: '',
+      direction: '',
+      address: '',
+      birthday: '',
+      sex: '',
+      university: '',
+      email: '',
+      skype: '',
+      phone: '',
+      id: uuidv4(),
+      error: false,
+    });
   };
 
   handleInputChange = (e) => {

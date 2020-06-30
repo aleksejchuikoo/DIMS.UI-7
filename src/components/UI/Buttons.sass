@@ -10,6 +10,16 @@
   color: $light-text
   cursor: pointer
   transition: .2s
+  &-close
+    background-color: darken($bg-form, 15%)
+    border: 1px solid darken($bg-form, 25%)
+    color: darken($bg-form, 45%)
+    font-size: 22px
+    transition: .2s
+    &:hover
+      background-color: darken($bg-form, 25%)
+      border: 1px solid darken($bg-form, 35%)
+      color: darken($bg-form, 65%)
   &-leave
     background-color: #c62828
     border: 1px solid #b71c1c
@@ -37,37 +47,37 @@
       background-color: #4caf50
       border: 1px solid lighten #2e7d32
   &-edit
-    background-color: #3e9bc0
+    background-color: #2d87aa
     border: 1px solid #2c7a99
     transition: .2s
     color: $light-theme
     &:hover
-      background-color: #378daf
+      background-color: #30a5d3
       border: 1px solid #266983
   &-delete
-    background-color: #c62828
+    background-color: #a11b1b
     border: 1px solid #b71c1c
     transition: .2s
     color: $light-theme
     &:hover
-      background-color: #b32424
+      background-color: #da2424
       border: 1px solid #941919
   &-showProgress
-    background-color: #4bd329
-    border: 1px solid #459421
+    background-color: #b48121
+    border: 1px solid #b47f1d
     transition: .2s
     color: $light-theme
     &:hover
-      background-color: #42b625
-      border: 1px solid #3b7e1d
+      background-color: #e09c1c
+      border: 1px solid #b8821f
   &-showTasks
-    background-color: #d7da28
+    background-color: #babd27
     border: 1px solid #a8aa20
     transition: .2s
     color: $light-theme
     &:hover
-      background-color: #aeb11f
-      border: 1px solid #8b8d1a
+      background-color: #dbdf17
+      border: 1px solid #a9ac13
   &-edit, &-delete, &-showProgress, &-showTasks
     padding: 4px 0
     font-size: 14px

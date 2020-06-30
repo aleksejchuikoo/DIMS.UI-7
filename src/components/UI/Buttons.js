@@ -11,7 +11,11 @@ export function CrossButton(props) {
 
 export function Button(props) {
   return (
-    <button className={props.action ? `btn btn-${props.action}` : 'btn'} onClick={props.handleButton}>
+    <button
+      className={props.action ? `btn btn-${props.action}` : 'btn'}
+      onClick={props.handleButton}
+      type={`${props.type === 'submit'}` ? 'submit' : ''}
+    >
       {props.children}
     </button>
   );
@@ -32,7 +36,7 @@ export class RadioButtons extends Component {
     super(props);
 
     this.state = {
-      value: '',
+      value: this.props.value.toLowerCase(),
     };
   }
 
