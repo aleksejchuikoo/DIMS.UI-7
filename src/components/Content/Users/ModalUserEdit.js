@@ -46,6 +46,24 @@ export default class ModalUserEdit extends Component {
     };
   }
 
+  componentWillReceiveProps() {
+    this.setState({
+      firstName: this.props.dataUser.firstName,
+      lastName: this.props.dataUser.lastName,
+      startDate: this.props.dataUser.startDate,
+      mathScore: this.props.dataUser.mathScore,
+      education: this.props.dataUser.education,
+      direction: this.props.dataUser.direction,
+      address: this.props.dataUser.address,
+      birthday: this.props.dataUser.birthday,
+      sex: this.props.dataUser.sex,
+      university: this.props.dataUser.university,
+      email: this.props.dataUser.email,
+      skype: this.props.dataUser.skype,
+      phone: this.props.dataUser.phone,
+    });
+  }
+
   emailValidator = (e) => {
     let val = e.target.value;
 
@@ -57,9 +75,10 @@ export default class ModalUserEdit extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const data = this.state;
-    const { handleEdit } = this.props;
+    const { handleEdit, handleButton } = this.props;
 
-    handleEdit(data, data.id);
+    handleEdit(data, this.props.dataUser.id);
+    handleButton(e);
   };
 
   handleInputChange = (e) => {
@@ -96,11 +115,10 @@ export default class ModalUserEdit extends Component {
     return (
       <div className='headerModalOverlay' style={isOpen ? { display: 'flex' } : { display: 'none' }}>
         <div className='newUser'>
-          <div className='newUser__form_icon newUser__form-edit'>
-            <i className='fa fa-edit'></i>
-          </div>
-          <form className='newUser__form' onSubmit={() => this.handleEdit(this.state, dataUser.id)}>
-            <h1 className='newUser__form_title'>Edit User</h1>
+          <form className='newUser__form' onSubmit={this.handleSubmit}>
+            <h1 className='newUser__form_title'>
+              <i className='fa fa-edit'></i> Edit User
+            </h1>
             <div className='newUser__form_wrapper'>
               <div className='newUser__form_wrapper-inner'>
                 <div className='newUser__form_row'>

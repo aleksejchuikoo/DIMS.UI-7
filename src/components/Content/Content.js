@@ -4,14 +4,17 @@ import Users from './Users/Users';
 import NewUser from './NewUser/NewUser';
 import Tasks from './Tasks/Tasks';
 import NewTask from './NewTask/NewTask';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import UserTasks from './Users/UserTasks';
+import UserProgress from './Users/Progress/UserProgress';
 
 export default class Content extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
+      tasks: [1],
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -91,8 +94,7 @@ export default class Content extends Component {
     });
   }
 
-  handleEdit(event, editData, idData) {
-    event.preventDefault();
+  handleEdit(editData, idData) {
     const { data } = this.state;
     const selectedItem = data.findIndex((item) => item.id === idData);
     const firstArr = data.slice(0, selectedItem);
@@ -108,30 +110,40 @@ export default class Content extends Component {
   handleShowTasks() {}
 
   render() {
-    const { data } = this.state;
+    const { data, tasks } = this.state;
     return (
       <div className='content'>
-        <Route path='/users' exact>
-          <Users
-            data={data}
-            handleDelete={this.handleDelete}
-            handleEdit={this.handleEdit}
-            handleShowProgress={this.handleShowProgress}
-            handleShowTasks={this.handleShowTasks}
-          />
-        </Route>
+        <Switch>
+          <Route path='/users' exact>
+            <Users
+              data={data}
+              handleDelete={this.handleDelete}
+              handleEdit={this.handleEdit}
+              handleShowProgress={this.handleShowProgress}
+              handleShowTasks={this.handleShowTasks}
+            />
+          </Route>
 
-        <Route path='/new-user'>
-          <NewUser transferData={this.transferData} />
-        </Route>
+          <Route path='/users/:data.id/tasks'>
+            <UserTasks tasks={tasks} />
+          </Route>
 
-        <Route path='/tasks'>
-          <Tasks />
-        </Route>
+          <Route path='/users/:data.id/progress'>
+            <UserProgress tasks={tasks} />
+          </Route>
 
-        <Route path='/new-task'>
-          <NewTask />
-        </Route>
+          <Route path='/new-user'>
+            <NewUser transferData={this.transferData} />
+          </Route>
+
+          <Route path='/tasks'>
+            <Tasks />
+          </Route>
+
+          <Route path='/new-task'>
+            <NewTask />
+          </Route>
+        </Switch>
       </div>
     );
   }

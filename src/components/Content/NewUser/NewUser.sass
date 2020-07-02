@@ -6,6 +6,7 @@
   border-radius: 10px
   background-color: $bg-form
   border: 1px solid darken($bg-form, 10%)
+  animation: offset .3s
 .newUser__form
   padding: 15px 0
   width: 100%
@@ -25,6 +26,11 @@
     color: $dark-theme
     letter-spacing: 1px
     margin: 10px 0 25px 70px
+    display: flex
+    align-items: center
+    i
+      margin-right: 15px
+      font-size: 50px
   &_wrapper
     display: flex
     padding: 0 60px
@@ -50,7 +56,7 @@
 
 .newUser__form_icon
   position: absolute
-  top: 70px
+  top: 100px
   transform: translateX(-50%)
   i
     font-size: 40px
@@ -62,12 +68,6 @@
     border: 5px solid rgba(0,0,0,0.2)
     border-radius: 50%
     color: $light-text
-
-.newUser__form-edit
-  top: 100px
-  .fa-edit
-    color: darken($light-text, 45%)
-    border: 5px solid rgba(0,0,0,0.5)
 
 .address, .contacts
   background-color: darken($bg-form, 15%)

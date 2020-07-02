@@ -4,8 +4,9 @@ import { Button } from '../../UI/Buttons';
 import ModalUser from './ModalUser';
 import { useState } from 'react';
 import ModalUserEdit from './ModalUserEdit';
+import { NavLink } from 'react-router-dom';
 
-export default function User({ dataUser, hash, handleDelete, handleEdit, handleShowProgress, handleShowTasks }) {
+export default function User({ dataUser, hash, handleDelete, handleEdit }) {
   const [isOpen, openModal] = useState(false);
   const [isOpenEdit, editData] = useState(false);
 
@@ -64,12 +65,13 @@ export default function User({ dataUser, hash, handleDelete, handleEdit, handleS
         <div className='users__wrapper_item'>
           <div className='users__wrapper_column'>
             <div className='users__wrapper_row'>
-              <Button action='showTasks' handleButton={handleShowTasks}>
-                Tasks
-              </Button>
-              <Button action='showProgress' handleButton={handleShowProgress}>
-                Progress
-              </Button>
+              <NavLink to='users/:dataUser.id/tasks'>
+                <Button action='showTasks'>Tasks</Button>
+              </NavLink>
+
+              <NavLink to='users/:dataUser.id/progress'>
+                <Button action='showProgress'>Progress</Button>
+              </NavLink>
             </div>
             <div className='users__wrapper_row'>
               <Button action='edit' handleButton={showModalEdit}>
@@ -82,6 +84,7 @@ export default function User({ dataUser, hash, handleDelete, handleEdit, handleS
           </div>
         </div>
       </div>
+
       <ModalUserEdit dataUser={dataUser} isOpen={isOpenEdit} handleButton={showModalEdit} handleEdit={handleEdit} />
       <ModalUser dataUser={dataUser} isOpen={isOpen} handleButton={showModal} />
     </>

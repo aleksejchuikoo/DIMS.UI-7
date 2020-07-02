@@ -4,9 +4,9 @@ import './Users.sass';
 
 export default class Users extends Component {
   render() {
-    const { data, handleDelete, handleEdit, handleShowProgress, handleShowTasks } = this.props;
+    const { data, handleDelete, handleEdit } = this.props;
     return (
-      <div className='users'>
+      <div className='users users-animation'>
         <div className='users__title'>
           <div className='users__title-name'>#</div>
           <div className='users__title-name'>full name</div>
@@ -17,17 +17,7 @@ export default class Users extends Component {
           <div className='users__title-name'></div>
         </div>
         {data.map((item, i) => {
-          return (
-            <User
-              dataUser={item}
-              key={i}
-              hash={i + 1}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              handleShowProgress={handleShowProgress}
-              handleShowTasks={handleShowTasks}
-            />
-          );
+          return <User dataUser={item} key={i} hash={i + 1} handleDelete={handleDelete} handleEdit={handleEdit} />;
         })}
       </div>
     );

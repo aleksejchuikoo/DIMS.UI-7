@@ -1,5 +1,17 @@
 @import "../../../variables"
 
+.users
+  &__tasks, &-animation, &__tasks-title
+    animation: offset .3s
+
+@keyframes offset
+  0%
+    opacity: 0
+    transform: translateY(-40px)
+  100%
+    opacity: 1
+    transform: translateY(0)
+
 .users__title
   display: flex
   align-items: center
@@ -28,6 +40,10 @@
   max-width: 1030px
   margin: 0 auto
   background-color: $bg-form
+  &:last-child
+    border-bottom-left-radius: 10px
+    border-bottom-right-radius: 10px
+    margin-bottom: 70px
   &_column
     display: flex
     flex-direction: column
@@ -38,10 +54,6 @@
     justify-content: space-between
     &:first-child
       margin-bottom: 10px
-  &:last-child
-    border-bottom-left-radius: 10px
-    border-bottom-right-radius: 10px
-    margin-bottom: 70px
   &_item
     display: flex
     align-items: center
@@ -55,6 +67,16 @@
     &:last-child
       border: none
       flex: 2
+    &-marks
+      button
+        padding: 8px 0
+        width: 80px
+        &:first-child
+          margin-right: 15px
+      i
+        font-size: 24px
+      
+
 
 .userInfo
   border: none
@@ -66,3 +88,53 @@
   color: inherit
   font: inherit
   text-decoration: underline
+
+.users
+  &__tasks-title
+    display: flex
+    align-items: center
+    border-radius: 10px
+    border-bottom: 1px solid darken($bg-form, 10%)
+    max-width: 1030px
+    margin: 10px auto 0 auto
+    background-color: darken($bg-form, 15%)
+    flex-direction: column
+  &__task
+    display: flex
+
+.task-warning, .task-title
+  font-size: 35px
+  width: 100%
+  display: flex
+  align-items: center
+  margin-left: 40px
+
+  .fa-warning, .fa-tasks, .fa-calendar
+    color: $light-modal
+    margin-right: 15px
+
+.back
+  position: fixed
+  left: 20px
+  top: 50%
+  transform: translateY(-50%)
+  color: #fff
+  width: 70px
+  height: 70px
+  background-color: $accent
+  border-radius: 50%
+  font-size: 45px
+  display: flex
+  align-items: center
+  justify-content: center
+  transition: .2s
+  text-decoration: none
+  cursor: pointer
+  &:hover
+    background-color: darken($accent, 10%)
+    
+.App.theme-dark 
+  .users__tasks-title
+    background-color: $bg-form
+  .fa-warning, .fa-tasks, .fa-calendar
+    color: $bg-darkHeader
