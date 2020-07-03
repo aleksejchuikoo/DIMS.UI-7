@@ -2,17 +2,42 @@ import React, { Component } from 'react';
 import '../Users.sass';
 import Progress from './Progress';
 import Back from '../../../UI/Back';
+import { withRouter } from 'react-router-dom';
 
-export default class UserProgress extends Component {
+class UserProgress extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: 'Name',
+    };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const id = props.match.params.id;
+
+    const { data } = props;
+
+    const dataItem = data.find((item) => {
+      return item.id === id;
+    });
+
+    return {
+      ...state,
+      name: dataItem.firstName,
+    };
+  }
+
   render() {
     const { tasks } = this.props;
+    const { name } = this.state;
     return (
       <div className='users'>
         <Back />
         <div className='users__tasks-title'>
           {this.props.tasks.length ? (
             <p className='task-title'>
-              <i className='fa fa-calendar'></i> User progress
+              <i className='fa fa-calendar'></i> {name} progress
             </p>
           ) : (
             <p className='task-warning'>
@@ -39,3 +64,5 @@ export default class UserProgress extends Component {
     );
   }
 }
+
+export default withRouter(UserProgress);

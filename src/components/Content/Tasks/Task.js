@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button } from '../../UI/Buttons';
+import Button from '../../UI/Button';
 
 export class Task extends Component {
   render() {
-    const { hash } = this.props;
+    const { hash, tasks } = this.props;
     return (
       <div className='user__task'>
         <div className='users__wrapper'>

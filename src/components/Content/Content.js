@@ -8,6 +8,8 @@ import { Route, Switch } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import UserTasks from './Users/UserTasks';
 import UserProgress from './Users/Progress/UserProgress';
+import Error from './404/Error';
+import About from './About/About';
 
 export default class Content extends Component {
   constructor(props) {
@@ -19,8 +21,6 @@ export default class Content extends Component {
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleShowProgress = this.handleShowProgress.bind(this);
-    this.handleShowTasks = this.handleShowTasks.bind(this);
   }
 
   transferData = (data) => {
@@ -105,31 +105,23 @@ export default class Content extends Component {
     });
   }
 
-  handleShowProgress() {}
-
-  handleShowTasks() {}
-
   render() {
     const { data, tasks } = this.state;
     return (
       <div className='content'>
         <Switch>
+          <Route exact path='/' component={About} />
+
           <Route path='/users' exact>
-            <Users
-              data={data}
-              handleDelete={this.handleDelete}
-              handleEdit={this.handleEdit}
-              handleShowProgress={this.handleShowProgress}
-              handleShowTasks={this.handleShowTasks}
-            />
+            <Users data={data} handleDelete={this.handleDelete} handleEdit={this.handleEdit} />
           </Route>
 
-          <Route path='/users/:data.id/tasks'>
-            <UserTasks tasks={tasks} />
+          <Route path='/users/:id/tasks'>
+            <UserTasks tasks={tasks} data={data} />
           </Route>
 
-          <Route path='/users/:data.id/progress'>
-            <UserProgress tasks={tasks} />
+          <Route path='/users/:id/progress'>
+            <UserProgress data={data} tasks={tasks} />
           </Route>
 
           <Route path='/new-user'>
@@ -143,6 +135,8 @@ export default class Content extends Component {
           <Route path='/new-task'>
             <NewTask />
           </Route>
+
+          <Route path='*' component={Error} />
         </Switch>
       </div>
     );

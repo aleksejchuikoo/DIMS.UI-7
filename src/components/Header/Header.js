@@ -1,6 +1,7 @@
 import React from 'react';
 import './Header.sass';
-import { NavLink } from 'react-router-dom';
+import HeaderNavLink from './HeaderNavLink';
+import ButtonWithIcon from '../UI/ButtonWithIcon';
 
 export default function Header(props) {
   return (
@@ -8,30 +9,22 @@ export default function Header(props) {
       <div className='role'>Admin</div>
       <ul className='nav'>
         <li className='nav__item'>
-          <NavLink to='/users' className='nav__link' activeClassName='nav__link-active'>
-            Members
-          </NavLink>
+          <HeaderNavLink to='/users'>Members</HeaderNavLink>
         </li>
         <li className='nav__item'>
-          <NavLink to='/new-user' className='nav__link' activeClassName='nav__link-active'>
-            New member
-          </NavLink>
+          <HeaderNavLink to='/new-user'>New member</HeaderNavLink>
         </li>
         <li className='nav__item'>
-          <NavLink to='/tasks' className='nav__link' activeClassName='nav__link-active'>
-            Tasks
-          </NavLink>
+          <HeaderNavLink to='/tasks'>Tasks</HeaderNavLink>
         </li>
         <li className='nav__item'>
-          <NavLink to='/new-task' className='nav__link' activeClassName='nav__link-active'>
-            New task
-          </NavLink>
+          <HeaderNavLink to='/new-task'>New task</HeaderNavLink>
         </li>
       </ul>
       <div>
-        <button className='settings' onClick={props.showModal}>
+        <ButtonWithIcon className='settings' showModal={props.showModal}>
           <i className='fa fa-cogs'></i>
-        </button>
+        </ButtonWithIcon>
       </div>
     </div>
   );

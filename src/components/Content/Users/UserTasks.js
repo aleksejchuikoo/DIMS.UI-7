@@ -2,17 +2,43 @@ import React, { Component } from 'react';
 import './Users.sass';
 import Task from '../Tasks/Task';
 import Back from '../../UI/Back';
+import { withRouter } from 'react-router-dom';
 
-export default class UserTasks extends Component {
+class UserTasks extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: 'Name',
+      tasks: [],
+    };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const id = props.match.params.id;
+
+    const { data } = props;
+
+    const dataItem = data.find((item) => {
+      return item.id === id;
+    });
+
+    return {
+      ...state,
+      name: dataItem.firstName,
+    };
+  }
+
   render() {
     const { tasks } = this.props;
+    const { name } = this.state;
     return (
       <div className='users'>
         <Back />
         <div className='users__tasks-title'>
-          {this.props.tasks.length ? (
+          {tasks.length ? (
             <p className='task-title'>
-              <i className='fa fa-tasks'></i> User tasks
+              <i className='fa fa-tasks'></i> {name} tasks
             </p>
           ) : (
             <p className='task-warning'>
@@ -21,7 +47,7 @@ export default class UserTasks extends Component {
           )}
         </div>
         <div className='users__tasks'>
-          {this.props.tasks.length ? (
+          {tasks.length ? (
             <div className='users users-animation'>
               <div className='users__title'>
                 <div className='users__title-name'>#</div>
@@ -32,7 +58,7 @@ export default class UserTasks extends Component {
                 <div className='users__title-name'>Mark</div>
               </div>
               {tasks.map((item, i) => {
-                return <Task key={i} hash={i + 1} />;
+                return <Task key={i} hash={i + 1} tasks={item} />;
               })}
             </div>
           ) : null}
@@ -41,3 +67,5 @@ export default class UserTasks extends Component {
     );
   }
 }
+
+export default withRouter(UserTasks);

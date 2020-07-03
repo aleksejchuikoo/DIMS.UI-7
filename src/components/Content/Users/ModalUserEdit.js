@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import '../NewUser/NewUser.sass';
 import '../../Header/Modal/Modal.sass';
-import { Button, RadioButtons } from '../../UI/Buttons';
 import Dropdown from '../../UI/Dropdown';
 import Date from '../../UI/Date';
+import RadioButtons from '../../UI/RadioButtons';
+import Button from '../../UI/Button';
 
 const items = [
   {
@@ -46,7 +47,7 @@ export default class ModalUserEdit extends Component {
     };
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.setState({
       firstName: this.props.dataUser.firstName,
       lastName: this.props.dataUser.lastName,
@@ -63,6 +64,13 @@ export default class ModalUserEdit extends Component {
       phone: this.props.dataUser.phone,
     });
   }
+
+  // static getDerivedStateFromProps(props, state) {
+  //   return {
+  //     ...state,
+  //     ...props.dataUser
+  //   }
+  // }
 
   emailValidator = (e) => {
     let val = e.target.value;

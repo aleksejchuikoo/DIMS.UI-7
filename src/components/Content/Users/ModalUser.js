@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../Header/Modal/Modal.sass';
-import { CrossButton } from '../../UI/Buttons';
+import CrossButton from '../../UI/CrossButton';
 
 export default function ModalUser({ isOpen, handleButton, dataUser }) {
   return (

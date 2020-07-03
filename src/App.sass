@@ -1,5 +1,6 @@
 @import './variables'
-  
+@import './SwitchColor'
+
 *
   box-sizing: border-box
   padding: 0
@@ -13,23 +14,3 @@
   font-family: 'Slabo 27px', serif
   transition: .5s
   overflow-y: scroll
-
-/*---------------SWITCH COLOR----------------*/
-
-.App.theme-dark
-  background-color: $bg-dark
-  .header
-    background-color: $bg-darkHeader
-    color: $dark-theme-text
-    box-shadow: 1px 1px 8px darken(#cfcfcf, 4%)
-    .nav__link
-      color: $dark-theme-text
-    .settings:hover
-      border: 1px solid $dark-theme-text
-      color: lighten($dark-theme-text, 15%)
-      background-color: lighten($bg-dark, 10%)
-  .footer
-    background-color: $bg-darkHeader
-    color: $dark-theme-text
-    box-shadow: -1px -1px 8px darken(#cfcfcf, 4%)
-/*---------------SWITCH COLOR----------------*/

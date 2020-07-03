@@ -1,10 +1,10 @@
 import React from 'react';
 import './Users.sass';
-import { Button } from '../../UI/Buttons';
+import Button from '../../UI/Button';
 import ModalUser from './ModalUser';
 import { useState } from 'react';
 import ModalUserEdit from './ModalUserEdit';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function User({ dataUser, hash, handleDelete, handleEdit }) {
   const [isOpen, openModal] = useState(false);
@@ -47,6 +47,8 @@ export default function User({ dataUser, hash, handleDelete, handleEdit }) {
     return age;
   };
 
+  const { firstName, lastName, direction, education, startDate, birthday, id } = dataUser;
+
   return (
     <>
       <div className='users__wrapper'>
@@ -55,23 +57,23 @@ export default function User({ dataUser, hash, handleDelete, handleEdit }) {
         </div>
         <div className='users__wrapper_item'>
           <button onClick={showModal} className='userInfo'>
-            {`${dataUser.firstName} ${dataUser.lastName}`}
+            {`${firstName} ${lastName}`}
           </button>
         </div>
-        <div className='users__wrapper_item'>{dataUser.direction}</div>
-        <div className='users__wrapper_item'>{dataUser.education}</div>
-        <div className='users__wrapper_item'>{dataUser.startDate}</div>
-        <div className='users__wrapper_item'>{parseDate(dataUser.birthday)}</div>
+        <div className='users__wrapper_item'>{direction}</div>
+        <div className='users__wrapper_item'>{education}</div>
+        <div className='users__wrapper_item'>{startDate}</div>
+        <div className='users__wrapper_item'>{parseDate(birthday)}</div>
         <div className='users__wrapper_item'>
           <div className='users__wrapper_column'>
             <div className='users__wrapper_row'>
-              <NavLink to='users/:dataUser.id/tasks'>
+              <Link to={`/users/${id}/tasks`}>
                 <Button action='showTasks'>Tasks</Button>
-              </NavLink>
+              </Link>
 
-              <NavLink to='users/:dataUser.id/progress'>
+              <Link to={`/users/${id}/progress`}>
                 <Button action='showProgress'>Progress</Button>
-              </NavLink>
+              </Link>
             </div>
             <div className='users__wrapper_row'>
               <Button action='edit' handleButton={showModalEdit}>

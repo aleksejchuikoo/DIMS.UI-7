@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './NewUser.sass';
-import { Button, RadioButtons } from '../../UI/Buttons';
 import Dropdown from '../../UI/Dropdown';
 import Date from '../../UI/Date';
 import { v4 as uuidv4 } from 'uuid';
+import RadioButtons from '../../UI/RadioButtons';
+import Button from '../../UI/Button';
 
 const items = [
   {

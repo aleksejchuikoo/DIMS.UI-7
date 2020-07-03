@@ -1,0 +1,28 @@
+@import './variables'
+@import './components/Header/Modal/Modal'
+
+.App.theme-dark
+  background-color: $bg-dark
+  .header
+    background-color: $bg-darkHeader
+    color: $dark-theme-text
+    box-shadow: 1px 1px 8px darken(#cfcfcf, 4%)
+    .nav__link
+      color: $dark-theme-text
+    .settings:hover
+      border: 1px solid $dark-theme-text
+      color: lighten($dark-theme-text, 15%)
+      background-color: lighten($bg-dark, 10%)
+  .footer
+    background-color: $bg-darkHeader
+    color: $dark-theme-text
+    box-shadow: -1px -1px 8px darken(#cfcfcf, 4%)
+
+
+.headerModal.theme-dark
+  background-color: $dark-modal
+  box-shadow: 1px 1px 8px darken(#9e9e9e, 20%), -1px -1px 8px darken(#9e9e9e, 20%)
+
+.App.theme-dark .userModal
+  background-color: $dark-modal
+  box-shadow: 1px 1px 8px darken(#9e9e9e, 20%), -1px -1px 8px darken(#9e9e9e, 20%)

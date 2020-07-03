@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import './App.sass';
 import Header from './components/Header/Header';
 import Content from './components/Content/Content';
@@ -6,48 +6,76 @@ import Footer from './components/Footer/Footer';
 import { BrowserRouter } from 'react-router-dom';
 import HeaderModal from './components/Header/Modal/Modal';
 
-const App = () => {
-  const [isDark, setIsDark] = useState(false);
-  const [isOpen, openModal] = useState(false);
+class App extends Component {
+  constructor(props) {
+    super(props);
 
-  useEffect(() => {
+    this.state = {
+      isDark: false,
+      isOpen: false,
+    };
+  }
+
+  componentDidMount() {
     const currentThemeColor = localStorage.getItem('theme-color');
 
     if (currentThemeColor === 'theme-dark') {
-      setIsDark(true);
+      this.setState({
+        isDark: true,
+      });
     } else {
-      setIsDark(false);
+      this.setState({
+        isDark: false,
+      });
     }
-  }, []);
+  }
 
-  const handleSwitchColor = () => {
+  handleSwitchColor = () => {
+    const { isDark } = this.state;
     if (isDark) {
       localStorage.setItem('theme-color', 'theme-light');
-      setIsDark(false);
+      this.setState({
+        isDark: false,
+      });
     } else {
       localStorage.setItem('theme-color', 'theme-dark');
-      setIsDark(true);
+      this.setState({
+        isDark: true,
+      });
     }
   };
 
-  const showModal = () => {
+  showModal = () => {
+    const { isOpen } = this.state;
     if (isOpen) {
-      openModal(false);
+      this.setState({
+        isOpen: false,
+      });
     } else {
-      openModal(true);
+      this.setState({
+        isOpen: true,
+      });
     }
   };
 
-  return (
-    <BrowserRouter>
-      <div className={`App ${isDark ? 'theme-dark' : ''}`}>
-        <Header showModal={showModal} />
-        <Content />
-        <Footer />
-      </div>
-      <HeaderModal isOpen={isOpen} isDark={isDark} handleButton={showModal} handleChechbox={handleSwitchColor} />
-    </BrowserRouter>
-  );
-};
+  render() {
+    const { isOpen, isDark } = this.state;
+    return (
+      <BrowserRouter>
+        <div className={`App ${isDark ? 'theme-dark' : ''}`}>
+          <Header showModal={this.showModal} />
+          <Content />
+          <Footer />
+        </div>
+        <HeaderModal
+          isOpen={isOpen}
+          isDark={isDark}
+          handleButton={this.showModal}
+          handleChechbox={this.handleSwitchColor}
+        />
+      </BrowserRouter>
+    );
+  }
+}
 
 export default App;
