@@ -103,6 +103,8 @@ export default class NewUser extends Component {
       direction,
       address,
       sex,
+      birthday,
+      startDate,
       university,
       email,
       skype,
@@ -145,7 +147,7 @@ export default class NewUser extends Component {
                   <label>Start Date:</label>
                 </div>
                 <div className='newUser__form_wrapper-input'>
-                  <Date placeholder='DD/MM/YYYY' name='startDate' changeDate={this.handleComponent} />
+                  <Date placeholder='DD/MM/YYYY' name='startDate' value={startDate} changeDate={this.handleComponent} />
                 </div>
               </div>
               <span className='newUser__form_row-error'>Error</span>
@@ -207,7 +209,7 @@ export default class NewUser extends Component {
                 <label>Birth date:</label>
               </div>
               <div className='newUser__form_wrapper-input'>
-                <Date placeholder='DD/MM/YYYY' name='birthday' changeDate={this.handleComponent} />
+                <Date placeholder='DD/MM/YYYY' name='birthday' changeDate={this.handleComponent} value={birthday} />
               </div>
             </div>
             <div className='newUser__form_wrapper-inner'>

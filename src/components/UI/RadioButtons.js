@@ -21,7 +21,7 @@ export default class RadioButtons extends Component {
   };
 
   render() {
-    const { value } = this.state;
+    const { value } = this.props;
     return (
       <div className='radio-group'>
         <label className='radio'>

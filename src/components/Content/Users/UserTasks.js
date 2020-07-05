@@ -18,6 +18,7 @@ class UserTasks extends Component {
     const id = props.match.params.id;
 
     const { data } = props;
+    console.log(data);
 
     const dataItem = data.find((item) => {
       return item.id === id;

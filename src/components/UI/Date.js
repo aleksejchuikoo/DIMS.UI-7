@@ -56,8 +56,7 @@ export default class Date extends Component {
   };
 
   render() {
-    const { placeholder } = this.props;
-    const { value } = this.state;
+    const { placeholder, value } = this.props;
 
     return (
       <div>

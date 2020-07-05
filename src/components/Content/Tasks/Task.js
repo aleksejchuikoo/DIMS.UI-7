@@ -3,7 +3,7 @@ import Button from '../../UI/Button';
 
 export class Task extends Component {
   render() {
-    const { hash, tasks } = this.props;
+    const { hash } = this.props;
     return (
       <div className='user__task'>
         <div className='users__wrapper'>

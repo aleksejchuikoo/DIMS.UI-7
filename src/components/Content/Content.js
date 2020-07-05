@@ -16,16 +16,24 @@ export default class Content extends Component {
     super(props);
     this.state = {
       data: [],
-      tasks: [1],
+      tasks: [],
     };
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleDeleteTask = this.handleDeleteTask.bind(this);
+    this.handleEditTask = this.handleEditTask.bind(this);
   }
 
   transferData = (data) => {
     this.setState({
       data: [...this.state.data, { ...data }],
+    });
+  };
+
+  transferTasks = (tasks) => {
+    this.setState({
+      tasks: [...this.state.tasks, { ...tasks }],
     });
   };
 
@@ -94,6 +102,16 @@ export default class Content extends Component {
     });
   }
 
+  handleDeleteTask(id) {
+    const { tasks } = this.state;
+
+    const filteredTasks = tasks.filter((item) => id !== item.id);
+
+    this.setState({
+      tasks: [...filteredTasks],
+    });
+  }
+
   handleEdit(editData, idData) {
     const { data } = this.state;
     const selectedItem = data.findIndex((item) => item.id === idData);
@@ -102,6 +120,19 @@ export default class Content extends Component {
 
     this.setState({
       data: [...firstArr, editData, ...secondArr],
+    });
+  }
+
+  handleEditTask(editTask, idTask) {
+    console.log(editTask, idTask);
+
+    const { tasks } = this.state;
+    const selectedItem = tasks.findIndex((item) => item.id === idTask);
+    const firstArr = tasks.slice(0, selectedItem);
+    const secondArr = tasks.slice(selectedItem + 1);
+
+    this.setState({
+      tasks: [...firstArr, editTask, ...secondArr],
     });
   }
 
@@ -129,11 +160,11 @@ export default class Content extends Component {
           </Route>
 
           <Route path='/tasks'>
-            <Tasks />
+            <Tasks tasks={tasks} handleDelete={this.handleDeleteTask} handleEdit={this.handleEditTask} />
           </Route>
 
           <Route path='/new-task'>
-            <NewTask />
+            <NewTask transferTasks={this.transferTasks} />
           </Route>
 
           <Route path='*' component={Error} />

@@ -17,7 +17,7 @@ export default function Dropdown({ title, items = [], handlerDropdown, name, val
   return (
     <div className='dd-wrapper'>
       <div className='dd-header' role='button' onClick={toggle}>
-        <div className={`dd-header__title ${selection ? 'active' : ''}`}>{selection ? selection : title}</div>
+        <div className={`dd-header__title ${selection ? 'active' : ''}`}>{value ? value : title}</div>
         <div className={`dd-header__action ${open ? 'open' : ''}`}></div>
       </div>
       {open && (
