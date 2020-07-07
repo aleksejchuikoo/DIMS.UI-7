@@ -54,6 +54,7 @@ export default class Content extends Component {
           email: 'aleksej.chuyko@gmail.com',
           skype: 'Aleksej Chuiko',
           phone: '80295719375',
+          isActive: false,
           id: uuidv4(),
         },
         {
@@ -70,6 +71,7 @@ export default class Content extends Component {
           email: 'andrey.chuyko@gmail.com',
           skype: 'Andrey Chuiko',
           phone: '80295719375',
+          isActive: false,
           id: uuidv4(),
         },
         {
@@ -86,6 +88,7 @@ export default class Content extends Component {
           email: 'aleksandr.chuyko@gmail.com',
           skype: 'Aleksandr Chuiko',
           phone: '80295719375',
+          isActive: false,
           id: uuidv4(),
         },
       ],
@@ -124,17 +127,29 @@ export default class Content extends Component {
   }
 
   handleEditTask(editTask, idTask) {
-    console.log(editTask, idTask);
-
     const { tasks } = this.state;
     const selectedItem = tasks.findIndex((item) => item.id === idTask);
     const firstArr = tasks.slice(0, selectedItem);
     const secondArr = tasks.slice(selectedItem + 1);
 
     this.setState({
-      tasks: [...firstArr, editTask, ...secondArr],
+      tasks: [...firstArr, { ...editTask, id: idTask }, ...secondArr],
     });
   }
+
+  handleCheckbox = (id) => {
+    const { data } = this.state;
+    const selectedItem = data.findIndex((item) => item.id === id);
+
+    const { isActive } = data[selectedItem];
+
+    const firstArr = data.slice(0, selectedItem);
+    const secondArr = data.slice(selectedItem + 1);
+
+    this.setState({
+      data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
+    });
+  };
 
   render() {
     const { data, tasks } = this.state;
@@ -160,11 +175,17 @@ export default class Content extends Component {
           </Route>
 
           <Route path='/tasks'>
-            <Tasks tasks={tasks} handleDelete={this.handleDeleteTask} handleEdit={this.handleEditTask} />
+            <Tasks
+              tasks={tasks}
+              handleDelete={this.handleDeleteTask}
+              handleEdit={this.handleEditTask}
+              data={data}
+              handleCheckbox={this.handleCheckbox}
+            />
           </Route>
 
           <Route path='/new-task'>
-            <NewTask transferTasks={this.transferTasks} />
+            <NewTask transferTasks={this.transferTasks} data={data} handleCheckbox={this.handleCheckbox} />
           </Route>
 
           <Route path='*' component={Error} />

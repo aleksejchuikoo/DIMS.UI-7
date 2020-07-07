@@ -5,7 +5,7 @@ import CheckboxButton from '../../UI/CheckboxButton';
 import './Modal.sass';
 
 export default function HeaderModal(props) {
-  const { handleButton, handleChechbox, isDark, isOpen } = props;
+  const { handleButton, handleCheckbox, isDark, isOpen } = props;
 
   return (
     <div className='headerModalOverlay' style={isOpen ? { display: 'flex' } : { display: 'none' }}>
@@ -18,7 +18,7 @@ export default function HeaderModal(props) {
         </div>
         <div className='headerModal__body'>
           <span>Dark theme</span>
-          <CheckboxButton isActive={isDark} handleChechbox={handleChechbox} />
+          <CheckboxButton isActive={isDark} handleCheckbox={handleCheckbox} />
         </div>
         <div className='headerModal__footer'>
           <Button action='leave'>Log out</Button>

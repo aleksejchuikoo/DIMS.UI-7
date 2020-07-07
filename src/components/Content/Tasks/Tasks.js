@@ -3,7 +3,7 @@ import '../Users/Users.sass';
 import AllTasks from './AllTasks';
 
 export default function Tasks(props) {
-  const { tasks, handleDelete, handleEdit } = props;
+  const { tasks, handleDelete, handleEdit, data, handleCheckbox } = props;
   return (
     <div className='users users-animation'>
       {tasks.length ? (
@@ -22,7 +22,17 @@ export default function Tasks(props) {
             <div className='users__title-name'>manage</div>
           </div>
           {tasks.map((item, i) => {
-            return <AllTasks task={item} key={i} hash={i + 1} handleDelete={handleDelete} handleEdit={handleEdit} />;
+            return (
+              <AllTasks
+                data={data}
+                task={item}
+                key={i}
+                hash={i + 1}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                handleCheckbox={handleCheckbox}
+              />
+            );
           })}
         </div>
       ) : (

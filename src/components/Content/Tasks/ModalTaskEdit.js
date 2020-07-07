@@ -3,6 +3,7 @@ import '../NewUser/NewUser.sass';
 import '../../Header/Modal/Modal.sass';
 import Date from '../../UI/Date';
 import Button from '../../UI/Button';
+import CheckboxButton from '../../UI/CheckboxButton';
 
 export default class ModalUserEdit extends Component {
   constructor(props) {
@@ -14,6 +15,8 @@ export default class ModalUserEdit extends Component {
       deadlineDate: '',
       description: '',
       error: false,
+      idMembers: this.props.task.idMembers,
+      checkboxes: Array(this.props.data.length).fill(false),
     };
   }
 
@@ -24,6 +27,7 @@ export default class ModalUserEdit extends Component {
       deadlineDate: this.props.task.deadlineDate,
       description: this.props.task.description,
       error: false,
+      checkboxes: this.props.task.checkboxes,
     });
   }
 
@@ -38,6 +42,9 @@ export default class ModalUserEdit extends Component {
     e.preventDefault();
     const task = this.state;
     const { handleEdit, handleButton } = this.props;
+
+    console.log('otpravka', task.idMembers);
+    console.log('otpravka id', this.props.task);
 
     handleEdit(task, this.props.task.id);
     handleButton(e);
@@ -55,10 +62,28 @@ export default class ModalUserEdit extends Component {
     });
   };
 
-  render() {
-    const { taskName, startDate, deadlineDate, description } = this.state;
+  handleCheckbox = (id, number) => {
+    const { checkboxes, idMembers } = this.state;
 
-    const { isOpen, handleButton, task } = this.props;
+    const firstArr = checkboxes.slice(0, number);
+    const secondArr = checkboxes.slice(number + 1);
+    console.log(id);
+    console.log(idMembers);
+
+    this.setState({
+      checkboxes: [...firstArr, (checkboxes[number] = !checkboxes[number]), ...secondArr],
+      idMembers: [...idMembers, id],
+    });
+
+    console.log(this.state.idMembers);
+
+    this.props.handleCheckbox(id);
+  };
+
+  render() {
+    const { taskName, startDate, deadlineDate, description, checkboxes } = this.state;
+
+    const { isOpen, handleButton, task, data } = this.props;
 
     return (
       <div className='headerModalOverlay' style={isOpen ? { display: 'flex' } : { display: 'none' }}>
@@ -129,8 +154,21 @@ export default class ModalUserEdit extends Component {
                 <div className='newUser__form_wrapper-label'>
                   <label className='assing-members'>Assign members:</label>
                 </div>
-                <div className='newUser__form_wrapper-input'>
-                  <textarea className='textarea-desc' value='' name='assignMembers' />
+                <div className='newUser__form_wrapper-input assignMembers-edit'>
+                  {data.map((item, i) => {
+                    return (
+                      <div className='assign-member'>
+                        <CheckboxButton
+                          fullName={`${item.firstName} ${item.lastName}`}
+                          key={i}
+                          id={item.id}
+                          number={i}
+                          handleCheckbox={this.handleCheckbox}
+                          isActive={checkboxes[i]}
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

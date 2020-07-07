@@ -33,6 +33,7 @@
     &:last-child
       border: none
       flex: 2
+      
 .users__wrapper
   display: flex
   align-items: center
@@ -75,6 +76,19 @@
           margin-right: 15px
       i
         font-size: 24px
+
+.users__wrapper.users__wrapper-tasks
+  margin-bottom: 0
+
+.user__task
+  .users__wrapper
+    &:last-child
+      border-radius: 0
+  &:last-child
+    margin-bottom: 70px
+    .users__wrapper
+      border-bottom-left-radius: 10px
+      border-bottom-right-radius: 10px
       
 .userInfo
   border: none
@@ -99,6 +113,8 @@
     flex-direction: column
   &__task
     display: flex
+  &__tasks-block
+    margin-bottom: 70px
 
 .task-warning, .task-title
   font-size: 35px

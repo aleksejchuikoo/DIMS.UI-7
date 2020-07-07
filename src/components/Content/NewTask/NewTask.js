@@ -3,6 +3,7 @@ import '../NewUser/NewUser.sass';
 import Date from '../../UI/Date';
 import Button from '../../UI/Button';
 import { v4 as uuidv4 } from 'uuid';
+import CheckboxButton from '../../UI/CheckboxButton';
 
 export default class NewTask extends Component {
   constructor(props) {
@@ -13,8 +14,10 @@ export default class NewTask extends Component {
       startDate: '',
       deadlineDate: '',
       description: '',
+      idMembers: [],
       id: uuidv4(),
       error: false,
+      checkboxes: Array(this.props.data.length).fill(false),
     };
   }
 
@@ -29,8 +32,10 @@ export default class NewTask extends Component {
       startDate: '',
       deadlineDate: '',
       description: '',
+      idMembers: [],
       id: uuidv4(),
       error: false,
+      checkboxes: Array(this.props.data.length - 1).fill(false),
     });
   };
 
@@ -46,8 +51,23 @@ export default class NewTask extends Component {
     });
   };
 
+  handleCheckbox = (id, number) => {
+    const { checkboxes, idMembers } = this.state;
+
+    const firstArr = checkboxes.slice(0, number);
+    const secondArr = checkboxes.slice(number + 1);
+
+    this.setState({
+      checkboxes: [...firstArr, (checkboxes[number] = !checkboxes[number]), ...secondArr],
+      idMembers: [...idMembers, id],
+    });
+
+    this.props.handleCheckbox(id);
+  };
+
   render() {
-    const { taskName, startDate, deadlineDate, description } = this.state;
+    const { taskName, startDate, deadlineDate, description, checkboxes } = this.state;
+    const { data } = this.props;
     return (
       <div className='newUser'>
         <div className='newUser__form_icon'>
@@ -110,10 +130,23 @@ export default class NewTask extends Component {
           <div className='newUser__form_wrapper'>
             <div className='assign__block'>
               <div className='newUser__form_wrapper-label'>
-                <label className='assing-members'>Assign members:</label>
+                <label className='assign-members'>Assign members:</label>
               </div>
-              <div className='newUser__form_wrapper-input'>
-                <textarea className='textarea-desc' value='' name='assignMembers' />
+              <div className='newUser__form_wrapper-input newUser__form_wrapper-assignMembers'>
+                {data.map((item, i) => {
+                  return (
+                    <div className='assign-member'>
+                      <CheckboxButton
+                        fullName={`${item.firstName} ${item.lastName}`}
+                        key={i}
+                        id={item.id}
+                        number={i}
+                        handleCheckbox={this.handleCheckbox}
+                        isActive={checkboxes[i]}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

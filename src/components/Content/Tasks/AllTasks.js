@@ -43,7 +43,7 @@ class AllTasks extends Component {
   };
 
   render() {
-    const { hash, task, handleDelete, handleEdit } = this.props;
+    const { hash, task, handleDelete, handleEdit, data, handleCheckbox } = this.props;
     const { isOpen, isOpenEdit } = this.state;
 
     return (
@@ -55,6 +55,7 @@ class AllTasks extends Component {
           <div className='users__wrapper_item'>
             <button className='userInfo' onClick={this.showModal}>
               {task.taskName}
+              {task.id}
             </button>
           </div>
           <div className='users__wrapper_item'>{task.startDate}</div>
@@ -72,7 +73,14 @@ class AllTasks extends Component {
           </div>
         </div>
 
-        <ModalTaskEdit task={task} isOpen={isOpenEdit} handleButton={this.showModalEdit} handleEdit={handleEdit} />
+        <ModalTaskEdit
+          data={data}
+          task={task}
+          isOpen={isOpenEdit}
+          handleButton={this.showModalEdit}
+          handleEdit={handleEdit}
+          handleCheckbox={handleCheckbox}
+        />
 
         <ModalTask task={task} isOpen={isOpen} handleButton={this.showModal} />
       </>

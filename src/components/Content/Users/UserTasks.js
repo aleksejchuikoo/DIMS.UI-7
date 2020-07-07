@@ -9,7 +9,7 @@ class UserTasks extends Component {
     super(props);
 
     this.state = {
-      name: 'Name',
+      name: '',
       tasks: [],
     };
   }
@@ -17,22 +17,21 @@ class UserTasks extends Component {
   static getDerivedStateFromProps(props, state) {
     const id = props.match.params.id;
 
-    const { data } = props;
-    console.log(data);
+    const { data, tasks } = props;
+    console.log('tasks', tasks.idMembers);
 
-    const dataItem = data.find((item) => {
-      return item.id === id;
-    });
+    const dataItem = data.find((item) => item.id === id);
+    const dataTask = tasks.filter((item) => item.idMembers.includes(id));
 
     return {
       ...state,
       name: dataItem.firstName,
+      tasks: [...state.tasks, ...dataTask],
     };
   }
 
   render() {
-    const { tasks } = this.props;
-    const { name } = this.state;
+    const { name, tasks } = this.state;
     return (
       <div className='users'>
         <Back />
@@ -55,6 +54,7 @@ class UserTasks extends Component {
                 <div className='users__title-name'>name</div>
                 <div className='users__title-name'>start</div>
                 <div className='users__title-name'>deadline</div>
+                <div className='users__title-name'>description</div>
                 <div className='users__title-name'>status</div>
                 <div className='users__title-name'>Mark</div>
               </div>

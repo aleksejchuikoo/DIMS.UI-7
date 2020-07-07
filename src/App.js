@@ -71,7 +71,7 @@ class App extends Component {
           isOpen={isOpen}
           isDark={isDark}
           handleButton={this.showModal}
-          handleChechbox={this.handleSwitchColor}
+          handleCheckbox={this.handleSwitchColor}
         />
       </BrowserRouter>
     );
