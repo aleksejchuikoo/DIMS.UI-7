@@ -55,7 +55,6 @@ class AllTasks extends Component {
           <div className='users__wrapper_item'>
             <button className='userInfo' onClick={this.showModal}>
               {task.taskName}
-              {task.id}
             </button>
           </div>
           <div className='users__wrapper_item'>{task.startDate}</div>

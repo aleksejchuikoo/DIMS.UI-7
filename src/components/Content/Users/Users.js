@@ -23,7 +23,9 @@ export default function Users(props) {
             <div className='users__title-name'></div>
           </div>
           {data.map((item, i) => {
-            return <User dataUser={item} key={i} hash={i + 1} handleDelete={handleDelete} handleEdit={handleEdit} />;
+            return (
+              <User dataUser={item} key={item.id} hash={i + 1} handleDelete={handleDelete} handleEdit={handleEdit} />
+            );
           })}
         </div>
       ) : (

@@ -31,20 +31,10 @@ export default class ModalUserEdit extends Component {
     });
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   return {
-  //     ...state,
-  //     ...props.dataUser
-  //   }
-  // }
-
   handleSubmit = (e) => {
     e.preventDefault();
     const task = this.state;
     const { handleEdit, handleButton } = this.props;
-
-    console.log('otpravka', task.idMembers);
-    console.log('otpravka id', this.props.task);
 
     handleEdit(task, this.props.task.id);
     handleButton(e);
@@ -67,15 +57,11 @@ export default class ModalUserEdit extends Component {
 
     const firstArr = checkboxes.slice(0, number);
     const secondArr = checkboxes.slice(number + 1);
-    console.log(id);
-    console.log(idMembers);
 
     this.setState({
       checkboxes: [...firstArr, (checkboxes[number] = !checkboxes[number]), ...secondArr],
       idMembers: [...idMembers, id],
     });
-
-    console.log(this.state.idMembers);
 
     this.props.handleCheckbox(id);
   };

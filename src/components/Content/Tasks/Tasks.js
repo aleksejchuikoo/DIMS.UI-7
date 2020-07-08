@@ -26,7 +26,7 @@ export default function Tasks(props) {
               <AllTasks
                 data={data}
                 task={item}
-                key={i}
+                key={item.id}
                 hash={i + 1}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}

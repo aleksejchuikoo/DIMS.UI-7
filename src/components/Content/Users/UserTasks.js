@@ -18,7 +18,6 @@ class UserTasks extends Component {
     const id = props.match.params.id;
 
     const { data, tasks } = props;
-    console.log('tasks', tasks.idMembers);
 
     const dataItem = data.find((item) => item.id === id);
     const dataTask = tasks.filter((item) => item.idMembers.includes(id));
@@ -32,6 +31,7 @@ class UserTasks extends Component {
 
   render() {
     const { name, tasks } = this.state;
+    const { failStatus, successStatus } = this.props;
     return (
       <div className='users'>
         <Back />
@@ -59,7 +59,9 @@ class UserTasks extends Component {
                 <div className='users__title-name'>Mark</div>
               </div>
               {tasks.map((item, i) => {
-                return <Task key={i} hash={i + 1} tasks={item} />;
+                return (
+                  <Task key={item.id} hash={i + 1} tasks={item} failStatus={failStatus} successStatus={successStatus} />
+                );
               })}
             </div>
           ) : null}

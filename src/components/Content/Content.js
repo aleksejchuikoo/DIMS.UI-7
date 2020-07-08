@@ -49,7 +49,7 @@ export default class Content extends Component {
           direction: 'React',
           address: 'Minsk region, Ivenec',
           birthday: '13/03/2000',
-          sex: 'Male',
+          sex: 'male',
           university: '8.0',
           email: 'aleksej.chuyko@gmail.com',
           skype: 'Aleksej Chuiko',
@@ -66,7 +66,7 @@ export default class Content extends Component {
           direction: 'Angular',
           address: 'Minsk region, Ivenec',
           birthday: '13/07/1996',
-          sex: 'Male',
+          sex: 'male',
           university: '10.0',
           email: 'andrey.chuyko@gmail.com',
           skype: 'Andrey Chuiko',
@@ -83,7 +83,7 @@ export default class Content extends Component {
           direction: 'Java',
           address: 'Minsk region, Ivenec',
           birthday: '20/08/1999',
-          sex: 'Male',
+          sex: 'male',
           university: '9.0',
           email: 'aleksandr.chuyko@gmail.com',
           skype: 'Aleksandr Chuiko',
@@ -96,12 +96,18 @@ export default class Content extends Component {
   }
 
   handleDelete(id) {
-    const { data } = this.state;
+    const { data, tasks } = this.state;
 
+    const indexData = data.findIndex((item) => id === item.id);
     const filteredData = data.filter((item) => id !== item.id);
+    const filteredTasks = tasks.map((item) => ({
+      ...item,
+      checkboxes: item.checkboxes.filter((item, index) => index !== indexData),
+    }));
 
     this.setState({
       data: [...filteredData],
+      tasks: [...filteredTasks],
     });
   }
 
@@ -151,6 +157,28 @@ export default class Content extends Component {
     });
   };
 
+  failStatus = (fail, task, idTask) => {
+    const { tasks } = this.state;
+    const selectedItem = tasks.findIndex((item) => item.id === idTask);
+    const firstArr = tasks.slice(0, selectedItem);
+    const secondArr = tasks.slice(selectedItem + 1);
+
+    this.setState({
+      tasks: [...firstArr, { ...task, status: 'fail' }, ...secondArr],
+    });
+  };
+
+  successStatus = (success, task, idTask) => {
+    const { tasks } = this.state;
+    const selectedItem = tasks.findIndex((item) => item.id === idTask);
+    const firstArr = tasks.slice(0, selectedItem);
+    const secondArr = tasks.slice(selectedItem + 1);
+
+    this.setState({
+      tasks: [...firstArr, { ...task, status: success }, ...secondArr],
+    });
+  };
+
   render() {
     const { data, tasks } = this.state;
     return (
@@ -163,7 +191,7 @@ export default class Content extends Component {
           </Route>
 
           <Route path='/users/:id/tasks'>
-            <UserTasks tasks={tasks} data={data} />
+            <UserTasks tasks={tasks} data={data} failStatus={this.failStatus} successStatus={this.successStatus} />
           </Route>
 
           <Route path='/users/:id/progress'>

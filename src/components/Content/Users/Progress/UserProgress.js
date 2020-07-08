@@ -55,7 +55,7 @@ class UserProgress extends Component {
                 <div className='users__title-name'>Date</div>
               </div>
               {tasks.map((item, i) => {
-                return <Progress key={i} hash={i + 1} />;
+                return <Progress key={item.id} hash={i + 1} />;
               })}
             </div>
           ) : null}

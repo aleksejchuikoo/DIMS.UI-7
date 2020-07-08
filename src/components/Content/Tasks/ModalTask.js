@@ -32,6 +32,12 @@ export default function ModalTask({ isOpen, handleButton, task }) {
               <span>Description: </span>
               <p className='taskDesc'>{task.description}</p>
             </div>
+            {task.status && (
+              <div className='headerModal__wrapper_item'>
+                <span>Task name: </span>
+                <span className='span-userData'>{task.status}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

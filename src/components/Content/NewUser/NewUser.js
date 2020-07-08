@@ -78,6 +78,7 @@ export default class NewUser extends Component {
       email: '',
       skype: '',
       phone: '',
+      isActive: false,
       id: uuidv4(),
       error: false,
     });
