@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import '../NewUser/NewUser.sass';
+import { v4 as uuidv4 } from 'uuid';
 import Date from '../../UI/Date';
 import Button from '../../UI/Button';
-import { v4 as uuidv4 } from 'uuid';
 import CheckboxButton from '../../UI/CheckboxButton';
+import fire from '../../../config/Fire';
 
 export default class NewTask extends Component {
   constructor(props) {
@@ -25,6 +26,11 @@ export default class NewTask extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const tasks = this.state;
+    const firebaseDB = fire.database().ref();
+
+    firebaseDB.child('Tasks').push(tasks, (err) => {
+      if (err) console.log('NewTask', err.message);
+    });
 
     this.props.transferTasks(tasks);
 
@@ -73,7 +79,7 @@ export default class NewTask extends Component {
     return (
       <div className='newUser'>
         <div className='newUser__form_icon'>
-          <i className='fa fa-tasks'></i>
+          <i className='fa fa-tasks' />
         </div>
         <form className='newUser__form' onSubmit={this.handleSubmit}>
           <h1 className='newUser__form_title'>Add new task</h1>

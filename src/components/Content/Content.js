@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './Content.sass';
+import { Route, Switch } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import Users from './Users/Users';
 import NewUser from './NewUser/NewUser';
 import Tasks from './Tasks/Tasks';
 import NewTask from './NewTask/NewTask';
-import { Route, Switch } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import UserTasks from './Users/UserTasks';
 import UserProgress from './Users/Progress/UserProgress';
 import Error from './404/Error';
@@ -17,6 +17,7 @@ export default class Content extends Component {
     this.state = {
       data: [],
       tasks: [],
+      userTasks: [],
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -24,18 +25,6 @@ export default class Content extends Component {
     this.handleDeleteTask = this.handleDeleteTask.bind(this);
     this.handleEditTask = this.handleEditTask.bind(this);
   }
-
-  transferData = (data) => {
-    this.setState({
-      data: [...this.state.data, { ...data }],
-    });
-  };
-
-  transferTasks = (tasks) => {
-    this.setState({
-      tasks: [...this.state.tasks, { ...tasks }],
-    });
-  };
 
   componentDidMount() {
     this.setState({
@@ -95,31 +84,55 @@ export default class Content extends Component {
     });
   }
 
-  handleDelete(id) {
-    const { data, tasks } = this.state;
-
-    const indexData = data.findIndex((item) => id === item.id);
-    const filteredData = data.filter((item) => id !== item.id);
-    const filteredTasks = tasks.map((item) => ({
-      ...item,
-      checkboxes: item.checkboxes.filter((item, index) => index !== indexData),
-    }));
-
+  transferData = (dataUser) => {
+    const { data } = this.state;
     this.setState({
-      data: [...filteredData],
-      tasks: [...filteredTasks],
+      data: [...data, { ...dataUser }],
     });
-  }
+  };
 
-  handleDeleteTask(id) {
+  transferTasks = (tasksUser) => {
     const { tasks } = this.state;
+    this.setState({
+      tasks: [...tasks, { ...tasksUser }],
+    });
+  };
 
-    const filteredTasks = tasks.filter((item) => id !== item.id);
+  failStatus = (fail, task, idTask) => {
+    const { tasks } = this.state;
+    const selectedItem = tasks.findIndex((item) => item.id === idTask);
+    const firstArr = tasks.slice(0, selectedItem);
+    const secondArr = tasks.slice(selectedItem + 1);
 
     this.setState({
-      tasks: [...filteredTasks],
+      tasks: [...firstArr, { ...task, status: fail }, ...secondArr],
     });
-  }
+  };
+
+  successStatus = (success, task, idTask) => {
+    const { tasks } = this.state;
+    const selectedItem = tasks.findIndex((item) => item.id === idTask);
+    const firstArr = tasks.slice(0, selectedItem);
+    const secondArr = tasks.slice(selectedItem + 1);
+
+    this.setState({
+      tasks: [...firstArr, { ...task, status: success }, ...secondArr],
+    });
+  };
+
+  handleCheckbox = (id) => {
+    const { data } = this.state;
+    const selectedItem = data.findIndex((item) => item.id === id);
+
+    const { isActive } = data[selectedItem];
+
+    const firstArr = data.slice(0, selectedItem);
+    const secondArr = data.slice(selectedItem + 1);
+
+    this.setState({
+      data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
+    });
+  };
 
   handleEdit(editData, idData) {
     const { data } = this.state;
@@ -143,41 +156,31 @@ export default class Content extends Component {
     });
   }
 
-  handleCheckbox = (id) => {
-    const { data } = this.state;
-    const selectedItem = data.findIndex((item) => item.id === id);
-
-    const { isActive } = data[selectedItem];
-
-    const firstArr = data.slice(0, selectedItem);
-    const secondArr = data.slice(selectedItem + 1);
-
-    this.setState({
-      data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
-    });
-  };
-
-  failStatus = (fail, task, idTask) => {
+  handleDeleteTask(id) {
     const { tasks } = this.state;
-    const selectedItem = tasks.findIndex((item) => item.id === idTask);
-    const firstArr = tasks.slice(0, selectedItem);
-    const secondArr = tasks.slice(selectedItem + 1);
+
+    const filteredTasks = tasks.filter((item) => id !== item.id);
 
     this.setState({
-      tasks: [...firstArr, { ...task, status: 'fail' }, ...secondArr],
+      tasks: [...filteredTasks],
     });
-  };
+  }
 
-  successStatus = (success, task, idTask) => {
-    const { tasks } = this.state;
-    const selectedItem = tasks.findIndex((item) => item.id === idTask);
-    const firstArr = tasks.slice(0, selectedItem);
-    const secondArr = tasks.slice(selectedItem + 1);
+  handleDelete(id) {
+    const { data, tasks } = this.state;
+
+    const indexData = data.findIndex((item) => id === item.id);
+    const filteredData = data.filter((item) => id !== item.id);
+    const filteredTasks = tasks.map((item) => ({
+      ...item,
+      checkboxes: item.checkboxes.filter((item, index) => index !== indexData),
+    }));
 
     this.setState({
-      tasks: [...firstArr, { ...task, status: success }, ...secondArr],
+      data: [...filteredData],
+      tasks: [...filteredTasks],
     });
-  };
+  }
 
   render() {
     const { data, tasks } = this.state;

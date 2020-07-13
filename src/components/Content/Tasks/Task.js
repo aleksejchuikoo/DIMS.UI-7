@@ -24,6 +24,7 @@ class Task extends Component {
       });
     }
   };
+
   render() {
     const { hash, tasks, failStatus, successStatus } = this.props;
     const { isOpen } = this.state;
@@ -35,7 +36,7 @@ class Task extends Component {
               {hash}
             </div>
             <div className='users__wrapper_item'>
-              <button className='userInfo' onClick={this.showModal}>
+              <button type='button' className='userInfo' onClick={this.showModal}>
                 {tasks.taskName}
               </button>
             </div>
@@ -47,10 +48,10 @@ class Task extends Component {
             <div className='users__wrapper_item'>{tasks.status}</div>
             <div className='users__wrapper_item users__wrapper_item-marks'>
               <Button action='delete' handleButton={() => failStatus('Fail', tasks, tasks.id)}>
-                <i className='fa fa-thumbs-down'></i>
+                <i className='fa fa-thumbs-down' />
               </Button>
               <Button action='create' handleButton={() => successStatus('Success', tasks, tasks.id)}>
-                <i className='fa fa-thumbs-up'></i>
+                <i className='fa fa-thumbs-up' />
               </Button>
             </div>
           </div>

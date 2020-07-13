@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Users.sass';
+import { withRouter } from 'react-router-dom';
 import Task from '../Tasks/Task';
 import Back from '../../UI/Back';
-import { withRouter } from 'react-router-dom';
 
 class UserTasks extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class UserTasks extends Component {
     return {
       ...state,
       name: dataItem.firstName,
-      tasks: [...state.tasks, ...dataTask],
+      tasks: dataTask,
     };
   }
 
@@ -38,11 +38,14 @@ class UserTasks extends Component {
         <div className='users__tasks-title'>
           {tasks.length ? (
             <p className='task-title'>
-              <i className='fa fa-tasks'></i> {name} tasks
+              <i className='fa fa-tasks' />
+              {name}
+              tasks
             </p>
           ) : (
             <p className='task-warning'>
-              <i className='fa fa-warning'></i> This user has no tasks
+              <i className='fa fa-warning' />
+              This user has no tasks
             </p>
           )}
         </div>

@@ -1,10 +1,10 @@
 import React from 'react';
 import './Users.sass';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../../UI/Button';
 import ModalUser from './ModalUser';
-import { useState } from 'react';
 import ModalUserEdit from './ModalUserEdit';
-import { Link } from 'react-router-dom';
 
 export default function User({ dataUser, hash, handleDelete, handleEdit }) {
   const [isOpen, openModal] = useState(false);
@@ -29,19 +29,19 @@ export default function User({ dataUser, hash, handleDelete, handleEdit }) {
   };
 
   const parseDate = (date) => {
-    let now = new Date(),
-      today = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-      dayOfBirthday = date.split('/');
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let dayOfBirthday = date.split('/');
 
     dayOfBirthday = `${dayOfBirthday[2]}-${dayOfBirthday[1]}-${dayOfBirthday[0]}`;
     dayOfBirthday = new Date(Date.parse(dayOfBirthday));
 
-    let dayOfBirthdayNow = new Date(today.getFullYear(), dayOfBirthday.getMonth(), dayOfBirthday.getDate());
+    const dayOfBirthdayNow = new Date(today.getFullYear(), dayOfBirthday.getMonth(), dayOfBirthday.getDate());
 
     let age = today.getFullYear() - dayOfBirthday.getFullYear();
 
     if (today < dayOfBirthdayNow) {
-      age = age - 1;
+      age -= 1;
     }
 
     return age;
@@ -56,7 +56,7 @@ export default function User({ dataUser, hash, handleDelete, handleEdit }) {
           {hash}
         </div>
         <div className='users__wrapper_item'>
-          <button onClick={showModal} className='userInfo'>
+          <button type='button' onClick={showModal} className='userInfo'>
             {`${firstName} ${lastName}`}
           </button>
         </div>

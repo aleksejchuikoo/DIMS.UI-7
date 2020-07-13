@@ -37,11 +37,14 @@ class UserProgress extends Component {
         <div className='users__tasks-title'>
           {this.props.tasks.length ? (
             <p className='task-title'>
-              <i className='fa fa-calendar'></i> {name} progress
+              <i className='fa fa-calendar' />
+              {name}
+              progress
             </p>
           ) : (
             <p className='task-warning'>
-              <i className='fa fa-warning'></i> This user has no tasks
+              <i className='fa fa-warning' />
+              This user has no tasks
             </p>
           )}
         </div>

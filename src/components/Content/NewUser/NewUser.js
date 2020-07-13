@@ -5,6 +5,7 @@ import Date from '../../UI/Date';
 import { v4 as uuidv4 } from 'uuid';
 import RadioButtons from '../../UI/RadioButtons';
 import Button from '../../UI/Button';
+import fire from '../../../config/Fire';
 
 const items = [
   {
@@ -62,6 +63,12 @@ export default class NewUser extends Component {
     e.preventDefault();
     const data = this.state;
 
+    const firebaseDB = fire.database().ref();
+
+    firebaseDB.child('Data').push(data, (err) => {
+      if (err) console.log('NewUser', err.message);
+    });
+
     this.props.transferData(data);
 
     this.setState({
@@ -116,7 +123,7 @@ export default class NewUser extends Component {
     return (
       <div className='newUser'>
         <div className='newUser__form_icon'>
-          <i className='fa fa-user-plus'></i>
+          <i className='fa fa-user-plus' />
         </div>
         <form className='newUser__form' onSubmit={this.handleSubmit}>
           <h1 className='newUser__form_title'>Create new user</h1>

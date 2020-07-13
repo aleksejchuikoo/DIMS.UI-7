@@ -106,3 +106,75 @@
 
 /*---------------USER MODAL----------------*/
 
+/*---------------Form registry----------------*/
+
+.form__block
+  width: 100%
+  height: 80%
+  display: flex
+  justify-content: center
+  align-items: center
+
+.headerModal__form
+  width: 400px
+
+.form__block
+  .headerModal__body
+    height: 70%
+    margin: 0
+    margin-bottom: 20px
+    form
+      height: 100%
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+    .form__box
+      width: 100%
+      text-align: center
+      input:first-child
+        margin: 20px 0
+    
+.form__block
+  .headerModal
+    box-shadow: 1px 1px 8px darken(#9e9e9e, 2%), -1px -1px 8px darken(#9e9e9e, 2%)
+    &__header
+      background-color: $bg-footer_header
+    &__header-title
+      width: 100%
+      text-align: center
+      font-size: 25px
+      letter-spacing: 2px
+      font-weight: 700
+    &__body
+      display: block
+      input
+        margin: 10px 0
+        padding: 8px 14px
+        font-size: 15px
+        outline: none
+        border: none
+        border-radius: 5px
+        border: 1px solid #ccc
+        transition: .2s 
+        width: 80%
+        &:focus
+          border: 1px solid #000
+  .btn-actions
+    width: 100%
+    text-align: center
+  .btn-edit
+    font-size: 22px
+  .btn-create
+    display: inline-block
+  .btn-edit, .btn-create
+    padding: 4px 14px
+    width: 80%
+    margin-top: 6px
+
+.error
+  padding: 8px 35px
+  font-size: 16px
+  background-color: rgba(#f13e3e, .4)
+
+/*---------------Form registry----------------*/
+

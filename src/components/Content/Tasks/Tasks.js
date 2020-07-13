@@ -10,7 +10,8 @@ export default function Tasks(props) {
         <div className='users__tasks-block'>
           <div className='users__tasks-title'>
             <p className='task-title'>
-              <i className='fa fa-tasks'></i>All tasks
+              <i className='fa fa-tasks' />
+              All tasks
             </p>
           </div>
           <div className='users__title'>
@@ -38,7 +39,8 @@ export default function Tasks(props) {
       ) : (
         <div className='users__tasks-title'>
           <p className='task-warning'>
-            <i className='fa fa-warning'></i> No tasks
+            <i className='fa fa-warning' />
+            No tasks
           </p>
         </div>
       )}

@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import '../Users/Users.sass';
 import Button from '../../UI/Button';
 import ModalTask from './ModalTask';
-import { Component } from 'react';
 import ModalTaskEdit from './ModalTaskEdit';
 
 class AllTasks extends Component {
@@ -16,7 +15,8 @@ class AllTasks extends Component {
   }
 
   showModal = () => {
-    if (this.state.isOpen) {
+    const { isOpen } = this.state;
+    if (isOpen) {
       this.setState({
         isOpen: false,
       });

@@ -3,9 +3,15 @@ import CrossButton from '../../UI/CrossButton';
 import Button from '../../UI/Button';
 import CheckboxButton from '../../UI/CheckboxButton';
 import './Modal.sass';
+import fire from '../../../config/Fire';
 
 export default function HeaderModal(props) {
-  const { handleButton, handleCheckbox, isDark, isOpen } = props;
+  const { handleButton, handleCheckbox, isDark, isOpen, fromRegistry } = props;
+
+  function logout() {
+    fire.auth().signOut();
+    handleButton();
+  }
 
   return (
     <div className='headerModalOverlay' style={isOpen ? { display: 'flex' } : { display: 'none' }}>
@@ -20,9 +26,13 @@ export default function HeaderModal(props) {
           <span>Dark theme</span>
           <CheckboxButton isActive={isDark} handleCheckbox={handleCheckbox} />
         </div>
-        <div className='headerModal__footer'>
-          <Button action='leave'>Log out</Button>
-        </div>
+        {fromRegistry ? null : (
+          <div className='headerModal__footer'>
+            <Button action='leave' handleButton={logout}>
+              Logout
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
