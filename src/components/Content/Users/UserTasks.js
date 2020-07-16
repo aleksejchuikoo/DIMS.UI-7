@@ -39,13 +39,12 @@ class UserTasks extends Component {
           {tasks.length ? (
             <p className='task-title'>
               <i className='fa fa-tasks' />
-              {name}
-              tasks
+              {name} tasks
             </p>
           ) : (
             <p className='task-warning'>
               <i className='fa fa-warning' />
-              This user has no tasks
+              {name} has no tasks
             </p>
           )}
         </div>

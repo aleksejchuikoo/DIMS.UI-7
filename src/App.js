@@ -81,7 +81,6 @@ class App extends Component {
 
   authListener() {
     fire.auth().onAuthStateChanged((user) => {
-      console.log(user);
       if (user) {
         this.setState({
           user,
@@ -103,7 +102,7 @@ class App extends Component {
           <>
             <div className={`App ${isDark ? 'theme-dark' : ''}`}>
               <Header showModal={this.showModal} role={role} />
-              <Content />
+              <Content isDark={isDark} />
               <Footer />
             </div>
             <HeaderModal

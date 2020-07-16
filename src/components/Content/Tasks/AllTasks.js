@@ -53,7 +53,7 @@ class AllTasks extends Component {
             {hash}
           </div>
           <div className='users__wrapper_item'>
-            <button className='userInfo' onClick={this.showModal}>
+            <button type='button' className='userInfo' onClick={this.showModal}>
               {task.taskName}
             </button>
           </div>
@@ -64,10 +64,10 @@ class AllTasks extends Component {
           </div>
           <div className='users__wrapper_item users__wrapper_item-marks'>
             <Button action='delete' handleButton={() => handleDelete(task.id)}>
-              <i className='fa fa-remove'></i>
+              <i className='fa fa-remove' />
             </Button>
             <Button action='create' handleButton={this.showModalEdit}>
-              <i className='fa fa-edit'></i>
+              <i className='fa fa-edit' />
             </Button>
           </div>
         </div>

@@ -52,8 +52,9 @@ export default class ModalUserEdit extends Component {
     });
   };
 
-  handleCheckbox = (id, number) => {
+  handleCheckbox = (id, number, user) => {
     const { checkboxes, idMembers } = this.state;
+    const { handleCheckbox } = this.props;
 
     const firstArr = checkboxes.slice(0, number);
     const secondArr = checkboxes.slice(number + 1);
@@ -63,7 +64,7 @@ export default class ModalUserEdit extends Component {
       idMembers: [...idMembers, id],
     });
 
-    this.props.handleCheckbox(id);
+    handleCheckbox(id, number, user);
   };
 
   render() {
@@ -76,7 +77,8 @@ export default class ModalUserEdit extends Component {
         <div className='newUser'>
           <form className='newUser__form' onSubmit={this.handleSubmit}>
             <h1 className='newUser__form_title'>
-              <i className='fa fa-edit'></i> Edit task
+              <i className='fa fa-edit' />
+              Edit task
             </h1>
             <div className='newUser__form_wrapper'>
               <div className='newUser__form_wrapper-inner'>
@@ -88,7 +90,12 @@ export default class ModalUserEdit extends Component {
                     value={taskName ? taskName : task.taskName}
                     onChange={this.handleInputChange}
                   />
-                  <span className='newUser__form_row-error'>Max: 20 symbols</span>
+                  <span
+                    className='newUser__form_row-error'
+                    style={taskName.length > 100 ? { visibility: 'visible' } : { visibility: 'hidden' }}
+                  >
+                    Max: 100 symbols
+                  </span>
                 </div>
               </div>
             </div>
@@ -146,8 +153,9 @@ export default class ModalUserEdit extends Component {
                       <div className='assign-member'>
                         <CheckboxButton
                           fullName={`${item.firstName} ${item.lastName}`}
-                          key={i}
+                          key={item.id}
                           id={item.id}
+                          user={item}
                           number={i}
                           handleCheckbox={this.handleCheckbox}
                           isActive={checkboxes[i]}

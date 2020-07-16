@@ -10,6 +10,7 @@ import UserTasks from './Users/UserTasks';
 import UserProgress from './Users/Progress/UserProgress';
 import Error from './404/Error';
 import About from './About/About';
+import fire from '../../config/Fire';
 
 export default class Content extends Component {
   constructor(props) {
@@ -19,84 +20,30 @@ export default class Content extends Component {
       tasks: [],
       userTasks: [],
     };
-
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleDeleteTask = this.handleDeleteTask.bind(this);
-    this.handleEditTask = this.handleEditTask.bind(this);
   }
 
   componentDidMount() {
-    this.setState({
-      data: [
-        {
-          firstName: 'Aleksej',
-          lastName: 'Chuyko',
-          startDate: '29/06/2020',
-          mathScore: '81',
-          education: 'BSUIR',
-          direction: 'React',
-          address: 'Minsk region, Ivenec',
-          birthday: '13/03/2000',
-          sex: 'male',
-          university: '8.0',
-          email: 'aleksej.chuyko@gmail.com',
-          skype: 'Aleksej Chuiko',
-          phone: '80295719375',
-          isActive: false,
-          id: uuidv4(),
-        },
-        {
-          firstName: 'Andrey',
-          lastName: 'Chuyko',
-          startDate: '30/06/2020',
-          mathScore: '65',
-          education: 'BNTU',
-          direction: 'Angular',
-          address: 'Minsk region, Ivenec',
-          birthday: '13/07/1996',
-          sex: 'male',
-          university: '10.0',
-          email: 'andrey.chuyko@gmail.com',
-          skype: 'Andrey Chuiko',
-          phone: '80295719375',
-          isActive: false,
-          id: uuidv4(),
-        },
-        {
-          firstName: 'Aleksandr',
-          lastName: 'Chuyko',
-          startDate: '30/06/2020',
-          mathScore: '74',
-          education: 'BSUIR',
-          direction: 'Java',
-          address: 'Minsk region, Ivenec',
-          birthday: '20/08/1999',
-          sex: 'male',
-          university: '9.0',
-          email: 'aleksandr.chuyko@gmail.com',
-          skype: 'Aleksandr Chuiko',
-          phone: '80295719375',
-          isActive: false,
-          id: uuidv4(),
-        },
-      ],
+    const db = fire.firestore();
+    db.collection('Data').onSnapshot((querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      this.setState({
+        data,
+      });
+    });
+
+    db.collection('Tasks').onSnapshot((querySnapshot) => {
+      const tasks = [];
+      querySnapshot.forEach((doc) => {
+        tasks.push(doc.data());
+      });
+      this.setState({
+        tasks,
+      });
     });
   }
-
-  transferData = (dataUser) => {
-    const { data } = this.state;
-    this.setState({
-      data: [...data, { ...dataUser }],
-    });
-  };
-
-  transferTasks = (tasksUser) => {
-    const { tasks } = this.state;
-    this.setState({
-      tasks: [...tasks, { ...tasksUser }],
-    });
-  };
 
   failStatus = (fail, task, idTask) => {
     const { tasks } = this.state;
@@ -120,70 +67,75 @@ export default class Content extends Component {
     });
   };
 
-  handleCheckbox = (id) => {
-    const { data } = this.state;
-    const selectedItem = data.findIndex((item) => item.id === id);
+  handleCheckbox = (id, number, user) => {
+    // const { data } = this.state;
+    // const selectedItem = data.findIndex((item) => item.id === id);
 
-    const { isActive } = data[selectedItem];
+    // const { isActive } = data[selectedItem];
 
-    const firstArr = data.slice(0, selectedItem);
-    const secondArr = data.slice(selectedItem + 1);
+    // const firstArr = data.slice(0, selectedItem);
+    // const secondArr = data.slice(selectedItem + 1);
 
-    this.setState({
-      data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
-    });
+    // this.setState({
+    //   data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
+    // });
+    const db = fire.firestore();
+
+    console.log(id, number, user);
+    db.collection('Data')
+      .doc(id)
+      .update({
+        ...user,
+        isActive: !user.isActive,
+      })
+      .catch((err) => {
+        console.log('Error handleEdit', err.message);
+      });
   };
 
-  handleEdit(editData, idData) {
-    const { data } = this.state;
-    const selectedItem = data.findIndex((item) => item.id === idData);
-    const firstArr = data.slice(0, selectedItem);
-    const secondArr = data.slice(selectedItem + 1);
+  handleEdit = (editData, idData) => {
+    const db = fire.firestore();
 
-    this.setState({
-      data: [...firstArr, editData, ...secondArr],
-    });
-  }
+    db.collection('Data')
+      .doc(idData)
+      .update({
+        ...editData,
+      })
+      .catch((err) => {
+        console.log('Error handleEdit', err.message);
+      });
+  };
 
-  handleEditTask(editTask, idTask) {
-    const { tasks } = this.state;
-    const selectedItem = tasks.findIndex((item) => item.id === idTask);
-    const firstArr = tasks.slice(0, selectedItem);
-    const secondArr = tasks.slice(selectedItem + 1);
+  handleEditTask = (editTask, idTask) => {
+    const db = fire.firestore();
 
-    this.setState({
-      tasks: [...firstArr, { ...editTask, id: idTask }, ...secondArr],
-    });
-  }
+    db.collection('Tasks')
+      .doc(idTask)
+      .update({
+        ...editTask,
+      })
+      .catch((err) => {
+        console.log('Error handleEditTask', err.message);
+      });
+  };
 
-  handleDeleteTask(id) {
-    const { tasks } = this.state;
+  handleDeleteTask = (id) => {
+    const db = fire.firestore();
+    db.collection('Tasks')
+      .doc(id)
+      .delete();
+  };
 
-    const filteredTasks = tasks.filter((item) => id !== item.id);
-
-    this.setState({
-      tasks: [...filteredTasks],
-    });
-  }
-
-  handleDelete(id) {
-    const { data, tasks } = this.state;
-
-    const indexData = data.findIndex((item) => id === item.id);
-    const filteredData = data.filter((item) => id !== item.id);
-    const filteredTasks = tasks.map((item) => ({
-      ...item,
-      checkboxes: item.checkboxes.filter((item, index) => index !== indexData),
-    }));
-
-    this.setState({
-      data: [...filteredData],
-      tasks: [...filteredTasks],
-    });
-  }
+  handleDelete = (id) => {
+    const db = fire.firestore();
+    db.collection('Data')
+      .doc(id)
+      .delete();
+  };
 
   render() {
     const { data, tasks } = this.state;
+    const { isDark } = this.props;
     return (
       <div className='content'>
         <Switch>
@@ -202,7 +154,7 @@ export default class Content extends Component {
           </Route>
 
           <Route path='/new-user'>
-            <NewUser transferData={this.transferData} />
+            <NewUser transferData={this.transferData} isDark={isDark} />
           </Route>
 
           <Route path='/tasks'>
@@ -216,7 +168,12 @@ export default class Content extends Component {
           </Route>
 
           <Route path='/new-task'>
-            <NewTask transferTasks={this.transferTasks} data={data} handleCheckbox={this.handleCheckbox} />
+            <NewTask
+              transferTasks={this.transferTasks}
+              data={data}
+              handleCheckbox={this.handleCheckbox}
+              isDark={isDark}
+            />
           </Route>
 
           <Route path='*' component={Error} />

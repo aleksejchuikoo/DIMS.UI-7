@@ -2,9 +2,12 @@ import React from 'react';
 import './Buttons.sass';
 
 export default function CheckboxButton(props) {
-  const { isActive, fullName, handleCheckbox, id, number } = props;
+  const { isActive, fullName, handleCheckbox, id, number, user } = props;
   return (
-    <div className={`theme-switcher-label ${isActive ? 'active' : ''}`} onClick={() => handleCheckbox(id, number)}>
+    <div
+      className={`theme-switcher-label ${isActive ? 'active' : ''}`}
+      onClick={() => handleCheckbox(id, number, user)}
+    >
       <div className='switch-path'>
         <div className='switch-handle'></div>
       </div>

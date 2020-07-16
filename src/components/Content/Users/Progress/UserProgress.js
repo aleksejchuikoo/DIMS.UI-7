@@ -18,9 +18,7 @@ class UserProgress extends Component {
 
     const { data } = props;
 
-    const dataItem = data.find((item) => {
-      return item.id === id;
-    });
+    const dataItem = data.find((item) => item.id === id);
 
     return {
       ...state,
@@ -35,21 +33,20 @@ class UserProgress extends Component {
       <div className='users'>
         <Back />
         <div className='users__tasks-title'>
-          {this.props.tasks.length ? (
+          {tasks.length ? (
             <p className='task-title'>
               <i className='fa fa-calendar' />
-              {name}
-              progress
+              {name} progress
             </p>
           ) : (
             <p className='task-warning'>
               <i className='fa fa-warning' />
-              This user has no tasks
+              {name} has no tasks
             </p>
           )}
         </div>
         <div className='users__tasks'>
-          {this.props.tasks.length ? (
+          {tasks.length ? (
             <div className='users users-animation'>
               <div className='users__title'>
                 <div className='users__title-name'>#</div>

@@ -11,10 +11,10 @@ export default class Date extends Component {
   }
 
   handleChange = (e) => {
-    let val = e.target.value,
-      regExp = /\d+/g;
+    let val = e.target.value;
+    const { changeDate, name } = this.props;
 
-    if (regExp.test(val)) {
+    if (val) {
       if (val.length === 2 || val.length === 5) {
         val += '/';
         this.setState({
@@ -28,20 +28,23 @@ export default class Date extends Component {
         });
       }
 
-      this.props.changeDate(val, this.props.name);
+      changeDate(val, name);
     }
   };
 
   onKeyDown = (e) => {
-    let eventKey = e.key,
-      splitValue = this.state.value.split('');
+    const { value } = this.state;
+    const { changeDate, name } = this.props;
+    const eventKey = e.key;
+    const splitValue = value.split('');
 
     if (eventKey === 'Backspace') {
-      let val = splitValue.slice(0, splitValue.length).join('');
+      let val = splitValue.slice(0, splitValue.length - 1).join('');
 
-      if (val[val.length - 1] === '/') {
+      if (val.length === 3 || val.length === 6) {
+        val = val.slice(0, val.length - 1);
         this.setState({
-          value: val.slice(0, splitValue.length - 1),
+          value: val,
         });
       } else if (val.length === 1) {
         this.setState({
@@ -52,6 +55,7 @@ export default class Date extends Component {
           value: val,
         });
       }
+      changeDate(value, name);
     }
   };
 

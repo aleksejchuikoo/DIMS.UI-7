@@ -10,7 +10,8 @@ export default function Users(props) {
         <div className='users__tasks-block'>
           <div className='users__tasks-title'>
             <p className='task-title'>
-              <i className='fa fa-users' style={{ marginRight: '10px', fontSize: '26px' }}></i>All members
+              <i className='fa fa-users' style={{ marginRight: '10px', fontSize: '26px' }} />
+              All members
             </p>
           </div>
           <div className='users__title'>
@@ -20,7 +21,7 @@ export default function Users(props) {
             <div className='users__title-name'>education</div>
             <div className='users__title-name'>start</div>
             <div className='users__title-name'>age</div>
-            <div className='users__title-name'></div>
+            <div className='users__title-name' />
           </div>
           {data.map((item, i) => {
             return (
@@ -31,7 +32,8 @@ export default function Users(props) {
       ) : (
         <div className='users__tasks-title'>
           <p className='task-warning'>
-            <i className='fa fa-warning'></i> No users
+            <i className='fa fa-warning' />
+            No users
           </p>
         </div>
       )}
