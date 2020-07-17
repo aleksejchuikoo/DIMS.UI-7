@@ -19,6 +19,7 @@ export default class NewTask extends Component {
       idMembers: [],
       id: uuidv4(),
       error: '',
+      errorInput: '',
       checkboxes: Array(this.props.data.length).fill(false),
     };
   }
@@ -26,6 +27,7 @@ export default class NewTask extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const tasks = this.state;
+    const { errorInput } = this.state;
     const { data } = this.props;
 
     let userTask = { ...tasks, idMembers: true, checkboxes: true };
@@ -53,6 +55,10 @@ export default class NewTask extends Component {
         error: '',
         checkboxes: Array(this.props.data.length - 1).fill(false),
       });
+    } else if (errorInput === false) {
+      this.setState({
+        errorInput: true,
+      });
     } else {
       this.setState({
         error: true,
@@ -62,14 +68,14 @@ export default class NewTask extends Component {
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'taskName' && value.length > 100) {
+    if (name === 'taskName' && value.length >= 101) {
       this.setState({
-        [name]: value,
-        error: false,
+        errorInput: false,
       });
     } else {
       this.setState({
         [name]: value,
+        errorInput: '',
       });
     }
   };
@@ -96,14 +102,25 @@ export default class NewTask extends Component {
   };
 
   isError = () => {
-    const { error } = this.state;
-    this.setState({
-      error: !error,
-    });
+    const { error, errorInput } = this.state;
+    if (error && errorInput) {
+      this.setState({
+        error: '',
+        errorInput: '',
+      });
+    } else if (error) {
+      this.setState({
+        error: '',
+      });
+    } else {
+      this.setState({
+        errorInput: '',
+      });
+    }
   };
 
   render() {
-    const { taskName, startDate, deadlineDate, description, checkboxes, error } = this.state;
+    const { taskName, startDate, deadlineDate, description, checkboxes, error, errorInput } = this.state;
     const { data, isDark } = this.props;
     return (
       <>
@@ -125,7 +142,7 @@ export default class NewTask extends Component {
                   />
                   <span
                     className='newUser__form_row-error'
-                    style={taskName.length > 100 ? { visibility: 'visible' } : { visibility: 'hidden' }}
+                    style={taskName.length >= 100 ? { visibility: 'visible' } : { visibility: 'hidden' }}
                   >
                     Max: 100 symbols
                   </span>
@@ -203,7 +220,7 @@ export default class NewTask extends Component {
             </div>
           </form>
         </div>
-        <ModalError error={error} handleButton={this.isError} isDark={isDark} />
+        <ModalError error={error} errorInput={errorInput} handleButton={this.isError} isDark={isDark} />
       </>
     );
   }

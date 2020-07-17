@@ -27,6 +27,8 @@ const items = [
   },
 ];
 
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,3})*$/);
+
 export default class NewUser extends Component {
   constructor(props) {
     super(props);
@@ -44,10 +46,11 @@ export default class NewUser extends Component {
       university: '',
       email: '',
       skype: '',
-      phone: '',
+      phone: '+_ (___) ___-__-__',
       isActive: false,
       id: uuidv4(),
       error: '',
+      errorInput: '',
       role: 'user',
     };
   }
@@ -55,14 +58,58 @@ export default class NewUser extends Component {
   emailValidator = (e) => {
     const val = e.target.value;
 
-    this.setState({
-      email: val,
-    });
+    if (val.match(emailRegex)) {
+      console.log('true');
+      this.setState({
+        email: val,
+        errorInput: '',
+      });
+    } else {
+      console.log('false');
+      this.setState({
+        email: val,
+        errorInput: false,
+      });
+    }
   };
+
+  /* ------------------------Phone number validation------------------------ */
+
+  handlePointer = (e) => {
+    const { selectionStart } = e.target;
+    const currPos = selectionStart;
+
+    if (currPos !== 1) {
+      e.target.setSelectionRange(1, 1);
+    }
+  };
+
+  setPointer = (e) => {
+    const { selectionStart, name, value } = e.target;
+    const { phone } = this.state;
+
+    if (e.keyCode >= 48 && e.keyCode <= 57) {
+      console.log(value);
+      e.preventDefault();
+
+      const currPos = selectionStart;
+      const nextSymb = phone.indexOf('_', currPos + 1);
+
+      let pos = nextSymb;
+      if (pos === -1) {
+        pos = 1;
+      }
+
+      e.target.setSelectionRange(pos, pos);
+    }
+  };
+
+  /* ------------------------Phone number validation------------------------ */
 
   handleSubmit = (e) => {
     e.preventDefault();
     const data = this.state;
+    const { errorInput } = this.state;
     let userInfo = { ...data, isActive: true };
     userInfo = Object.values(userInfo).every((val) => !!val);
 
@@ -94,6 +141,11 @@ export default class NewUser extends Component {
         isActive: false,
         id: uuidv4(),
         error: '',
+        errorInput: '',
+      });
+    } else if (errorInput === false) {
+      this.setState({
+        errorInput: true,
       });
     } else {
       this.setState({
@@ -104,14 +156,14 @@ export default class NewUser extends Component {
 
   handleInputChange = (e) => {
     const { value, name } = e.target;
-    if ((name === 'firstName' || name === 'lastName') && value.length > 20) {
+    if ((name === 'firstName' || name === 'lastName') && value.length >= 31) {
       this.setState({
-        [name]: value,
-        error: false,
+        errorInput: false,
       });
     } else {
       this.setState({
         [name]: value,
+        errorInput: '',
       });
     }
   };
@@ -123,8 +175,7 @@ export default class NewUser extends Component {
     if (value === '-' || value === '+') {
       return;
     }
-
-    if ((regExp.test(value) || value === '') && value <= max && value.length <= max.length) {
+    if ((regExp.test(value) || value === '') && +value < +max + 1) {
       this.setState({
         [name]: value,
       });
@@ -138,10 +189,21 @@ export default class NewUser extends Component {
   };
 
   isError = () => {
-    const { error } = this.state;
-    this.setState({
-      error: !error,
-    });
+    const { error, errorInput } = this.state;
+    if (error && errorInput) {
+      this.setState({
+        error: '',
+        errorInput: '',
+      });
+    } else if (error) {
+      this.setState({
+        error: '',
+      });
+    } else {
+      this.setState({
+        errorInput: '',
+      });
+    }
   };
 
   render() {
@@ -160,6 +222,7 @@ export default class NewUser extends Component {
       skype,
       phone,
       error,
+      errorInput,
     } = this.state;
 
     const { isDark } = this.props;
@@ -184,9 +247,9 @@ export default class NewUser extends Component {
                   />
                   <span
                     className='newUser__form_row-error'
-                    style={firstName.length > 20 ? { visibility: 'visible' } : { visibility: 'hidden' }}
+                    style={firstName.length >= 30 ? { visibility: 'visible' } : { visibility: 'hidden' }}
                   >
-                    Max: 20 symbols
+                    Max: 30 symbols
                   </span>
                 </div>
                 <div className='newUser__form_row'>
@@ -199,9 +262,9 @@ export default class NewUser extends Component {
                   />
                   <span
                     className='newUser__form_row-error'
-                    style={lastName.length > 20 ? { visibility: 'visible' } : { visibility: 'hidden' }}
+                    style={lastName.length >= 30 ? { visibility: 'visible' } : { visibility: 'hidden' }}
                   >
-                    Max: 20 symbols
+                    Max: 30 symbols
                   </span>
                 </div>
               </div>
@@ -226,14 +289,13 @@ export default class NewUser extends Component {
                   </div>
                   <div className='newUser__form_wrapper-input'>
                     <input
-                      type='number'
-                      min='0'
-                      max='100'
-                      step='1'
+                      type='text'
                       placeholder='0'
+                      max='100'
                       name='mathScore'
                       value={mathScore}
-                      onChange={this.handleInputChange}
+                      onChange={this.handleRange}
+                      autoComplete='off'
                     />
                   </div>
                 </div>
@@ -270,6 +332,7 @@ export default class NewUser extends Component {
                 <div className='newUser__form_wrapper-input'>
                   <input type='text' name='address' value={address} onChange={this.handleInputChange} />
                 </div>
+                <span className='newUser__form_row-error'>Error</span>
               </div>
             </div>
             <div className='newUser__form_wrapper'>
@@ -289,18 +352,21 @@ export default class NewUser extends Component {
                   <RadioButtons name='sex' value={sex} changeRadio={this.handleComponent} />
                 </div>
               </div>
-              <div className='newUser__form_wrapper-inner'>
-                <label>University average score:</label>
-                <input
-                  type='number'
-                  min='0'
-                  max='10'
-                  step='0.1'
-                  placeholder='0'
-                  name='university'
-                  value={university}
-                  onChange={this.handleInputChange}
-                />
+              <div className='newUser__form_wrapper-inner wrapper-inner-score'>
+                <div className='newUser__form_wrapper-label'>
+                  <label>University average score:</label>
+                </div>
+                <div className='newUser__form_wrapper-input'>
+                  <input
+                    type='text'
+                    max='10'
+                    placeholder='0'
+                    name='university'
+                    value={university}
+                    onChange={this.handleRange}
+                    autoComplete='off'
+                  />
+                </div>
               </div>
             </div>
             <div className='newUser__form_wrapper contacts'>
@@ -309,7 +375,13 @@ export default class NewUser extends Component {
                   <label>Email:</label>
                 </div>
                 <div className='newUser__form_wrapper-input'>
-                  <input type='email' name='email' value={email} onChange={this.emailValidator} />
+                  <input
+                    type='email'
+                    name='email'
+                    value={email}
+                    onChange={this.emailValidator}
+                    style={!email.match(emailRegex) && email.length > 0 ? { border: '1px solid red' } : null}
+                  />
                 </div>
               </div>
               <div className='newUser__form_wrapper-inner'>
@@ -325,7 +397,14 @@ export default class NewUser extends Component {
                   <label>Phone:</label>
                 </div>
                 <div className='newUser__form_wrapper-input'>
-                  <input type='text' name='phone' value={phone} onChange={this.handleInputChange} />
+                  <input
+                    type='text'
+                    name='phone'
+                    value={phone}
+                    onChange={this.setPointer}
+                    onClick={this.handlePointer}
+                    onKeyDown={this.setPointer}
+                  />
                 </div>
               </div>
             </div>
@@ -335,7 +414,7 @@ export default class NewUser extends Component {
             </div>
           </form>
         </div>
-        <ModalError error={error} handleButton={this.isError} isDark={isDark} />
+        <ModalError error={error} errorInput={errorInput} handleButton={this.isError} isDark={isDark} />
       </>
     );
   }
