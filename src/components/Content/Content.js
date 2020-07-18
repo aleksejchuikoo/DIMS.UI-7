@@ -68,20 +68,19 @@ export default class Content extends Component {
   };
 
   handleCheckbox = (id, number, user) => {
-    // const { data } = this.state;
-    // const selectedItem = data.findIndex((item) => item.id === id);
+    const { data } = this.state;
+    const selectedItem = data.findIndex((item) => item.id === id);
 
-    // const { isActive } = data[selectedItem];
+    const { isActive } = data[selectedItem];
 
-    // const firstArr = data.slice(0, selectedItem);
-    // const secondArr = data.slice(selectedItem + 1);
+    const firstArr = data.slice(0, selectedItem);
+    const secondArr = data.slice(selectedItem + 1);
 
-    // this.setState({
-    //   data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
-    // });
+    this.setState({
+      data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
+    });
+
     const db = fire.firestore();
-
-    console.log(id, number, user);
     db.collection('Data')
       .doc(id)
       .update({
@@ -108,7 +107,6 @@ export default class Content extends Component {
 
   handleEditTask = (editTask, idTask) => {
     const db = fire.firestore();
-
     db.collection('Tasks')
       .doc(idTask)
       .update({
@@ -124,6 +122,16 @@ export default class Content extends Component {
     db.collection('Tasks')
       .doc(id)
       .delete();
+
+    db.collection('Tasks').onSnapshot((querySnapshot) => {
+      const tasks = [];
+      querySnapshot.forEach((doc) => {
+        tasks.push(doc.data());
+      });
+      this.setState({
+        tasks,
+      });
+    });
   };
 
   handleDelete = (id) => {
@@ -131,6 +139,16 @@ export default class Content extends Component {
     db.collection('Data')
       .doc(id)
       .delete();
+
+    db.collection('Data').onSnapshot((querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      this.setState({
+        data,
+      });
+    });
   };
 
   render() {
@@ -163,6 +181,7 @@ export default class Content extends Component {
               handleDelete={this.handleDeleteTask}
               handleEdit={this.handleEditTask}
               data={data}
+              isDark={isDark}
               handleCheckbox={this.handleCheckbox}
             />
           </Route>

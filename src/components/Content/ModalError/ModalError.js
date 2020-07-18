@@ -11,7 +11,7 @@ function ModalError(props) {
   };
 
   return (
-    <div className='headerModalOverlay' style={errorInput || error ? { display: 'flex' } : { display: 'none' }}>
+    <div className='headerModalOverlay' style={error || errorInput ? { display: 'flex' } : { display: 'none' }}>
       <div className={`headerModal headerModal-error ${isDark ? 'theme-dark' : ''}`} style={errorObj}>
         <div className='headerModal__header' style={{ borderBottom: 'none' }}>
           <div className='headerModal__header-title modal-error'>

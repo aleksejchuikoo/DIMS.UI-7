@@ -59,13 +59,11 @@ export default class NewUser extends Component {
     const val = e.target.value;
 
     if (val.match(emailRegex)) {
-      console.log('true');
       this.setState({
         email: val,
         errorInput: '',
       });
     } else {
-      console.log('false');
       this.setState({
         email: val,
         errorInput: false,
@@ -84,23 +82,27 @@ export default class NewUser extends Component {
     }
   };
 
-  setPointer = (e) => {
+  handlerPhone = (e) => {
     const { selectionStart, name, value } = e.target;
     const { phone } = this.state;
 
-    if (e.keyCode >= 48 && e.keyCode <= 57) {
-      console.log(value);
+    const currPos = selectionStart;
+    const nextSymb = phone.indexOf('_', currPos + 1);
+
+    let pos = nextSymb;
+    if (pos === -1) {
+      pos = 1;
+    }
+
+    this.setState({
+      [name]: value.replace(value[currPos], ''),
+    });
+    e.target.setSelectionRange(pos, pos);
+  };
+
+  setPointer = (e) => {
+    if (e.keyCode < 48 || e.keyCode > 57) {
       e.preventDefault();
-
-      const currPos = selectionStart;
-      const nextSymb = phone.indexOf('_', currPos + 1);
-
-      let pos = nextSymb;
-      if (pos === -1) {
-        pos = 1;
-      }
-
-      e.target.setSelectionRange(pos, pos);
     }
   };
 
@@ -109,11 +111,16 @@ export default class NewUser extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const data = this.state;
-    const { errorInput } = this.state;
-    let userInfo = { ...data, isActive: true };
+    const { errorInput, error } = this.state;
+
+    const filterData = Object.fromEntries(
+      Object.entries(data).filter((item) => item[0] !== 'error' && item[0] !== 'errorInput'),
+    );
+
+    let userInfo = { ...filterData, isActive: true };
     userInfo = Object.values(userInfo).every((val) => !!val);
 
-    if (userInfo) {
+    if (userInfo && error === '' && errorInput === '') {
       const db = fire.firestore();
       db.collection('Data')
         .doc(data.id)
@@ -137,7 +144,7 @@ export default class NewUser extends Component {
         university: '',
         email: '',
         skype: '',
-        phone: '',
+        phone: '+_ (___) ___-__-__',
         isActive: false,
         id: uuidv4(),
         error: '',
@@ -401,9 +408,9 @@ export default class NewUser extends Component {
                     type='text'
                     name='phone'
                     value={phone}
-                    onChange={this.setPointer}
                     onClick={this.handlePointer}
                     onKeyDown={this.setPointer}
+                    onChange={this.handlerPhone}
                   />
                 </div>
               </div>

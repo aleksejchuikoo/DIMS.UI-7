@@ -27,13 +27,16 @@ export default class NewTask extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const tasks = this.state;
-    const { errorInput } = this.state;
-    const { data } = this.props;
+    const { errorInput, error } = this.state;
 
-    let userTask = { ...tasks, idMembers: true, checkboxes: true };
+    const filterTasks = Object.fromEntries(
+      Object.entries(tasks).filter((item) => item[0] !== 'error' && item[0] !== 'errorInput'),
+    );
+
+    let userTask = { ...filterTasks, idMembers: true, checkboxes: true, status: true };
     userTask = Object.values(userTask).every((val) => !!val);
 
-    if (userTask) {
+    if (userTask && error === '' && errorInput === '') {
       const db = fire.firestore();
       db.collection('Tasks')
         .doc(tasks.id)
@@ -53,7 +56,7 @@ export default class NewTask extends Component {
         idMembers: [],
         id: uuidv4(),
         error: '',
-        checkboxes: Array(this.props.data.length - 1).fill(false),
+        checkboxes: Array(this.props.data.length).fill(false),
       });
     } else if (errorInput === false) {
       this.setState({
@@ -95,8 +98,18 @@ export default class NewTask extends Component {
 
     this.setState({
       checkboxes: [...firstArr, (checkboxes[number] = !checkboxes[number]), ...secondArr],
-      idMembers: [...idMembers, id],
     });
+
+    if (!idMembers.includes(id)) {
+      this.setState({
+        idMembers: [...idMembers, id],
+      });
+    } else {
+      const filterIdMembers = idMembers.filter((item) => item !== id);
+      this.setState({
+        idMembers: filterIdMembers,
+      });
+    }
 
     handleCheckbox(id, number, user);
   };
