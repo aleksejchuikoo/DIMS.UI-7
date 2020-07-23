@@ -24,7 +24,7 @@ export default class Content extends Component {
 
   componentDidMount() {
     const db = fire.firestore();
-    db.collection('Data').onSnapshot((querySnapshot) => {
+    db.collection('Members').onSnapshot((querySnapshot) => {
       const data = [];
       querySnapshot.forEach((doc) => {
         data.push(doc.data());
@@ -44,6 +44,26 @@ export default class Content extends Component {
       });
     });
   }
+
+  transferData = (dataUser) => {
+    const { data } = this.state;
+    this.setState({
+      data: [...data, { ...dataUser }],
+    });
+  };
+
+  transferTask = (task) => {
+    const { tasks } = this.state;
+    this.setState({
+      tasks: [...tasks, { ...task }],
+    });
+  };
+
+  transferUserTasks = (userTasks) => {
+    this.setState({
+      userTasks,
+    });
+  };
 
   failStatus = (fail, task, idTask) => {
     const { tasks } = this.state;
@@ -67,35 +87,10 @@ export default class Content extends Component {
     });
   };
 
-  handleCheckbox = (id, number, user) => {
-    const { data } = this.state;
-    const selectedItem = data.findIndex((item) => item.id === id);
-
-    const { isActive } = data[selectedItem];
-
-    const firstArr = data.slice(0, selectedItem);
-    const secondArr = data.slice(selectedItem + 1);
-
-    this.setState({
-      data: [...firstArr, { ...data[selectedItem], isActive: !isActive }, ...secondArr],
-    });
-
-    const db = fire.firestore();
-    db.collection('Data')
-      .doc(id)
-      .update({
-        ...user,
-        isActive: !user.isActive,
-      })
-      .catch((err) => {
-        console.log('Error handleEdit', err.message);
-      });
-  };
-
   handleEdit = (editData, idData) => {
     const db = fire.firestore();
 
-    db.collection('Data')
+    db.collection('Members')
       .doc(idData)
       .update({
         ...editData,
@@ -106,6 +101,7 @@ export default class Content extends Component {
   };
 
   handleEditTask = (editTask, idTask) => {
+    const { tasks } = this.state;
     const db = fire.firestore();
     db.collection('Tasks')
       .doc(idTask)
@@ -115,6 +111,14 @@ export default class Content extends Component {
       .catch((err) => {
         console.log('Error handleEditTask', err.message);
       });
+
+    const selectedItem = tasks.findIndex((item) => item.id === idTask);
+    const firstArr = tasks.slice(0, selectedItem);
+    const secondArr = tasks.slice(selectedItem + 1);
+
+    this.setState({
+      tasks: [...firstArr, editTask, ...secondArr],
+    });
   };
 
   handleDeleteTask = (id) => {
@@ -135,67 +139,146 @@ export default class Content extends Component {
   };
 
   handleDelete = (id) => {
+    const { tasks } = this.state;
+
     const db = fire.firestore();
-    db.collection('Data')
+    db.collection('Members')
       .doc(id)
       .delete();
 
-    db.collection('Data').onSnapshot((querySnapshot) => {
-      const data = [];
+    db.collection('Users')
+      .doc(id)
+      .delete();
+
+    db.collection('Members').onSnapshot((querySnapshot) => {
+      const dataArr = [];
       querySnapshot.forEach((doc) => {
-        data.push(doc.data());
+        dataArr.push(doc.data());
       });
       this.setState({
-        data,
+        data: dataArr,
       });
     });
+
+    if (tasks.length) {
+      const checkbox = tasks[0].checkboxes.filter((item) => Object.keys(item)[0] !== id);
+
+      db.collection('Tasks').onSnapshot((querySnapshot) => {
+        const updateTasks = [];
+        querySnapshot.forEach((doc) => {
+          updateTasks.push({ ...doc.data(), checkboxes: checkbox });
+          db.collection('Tasks')
+            .doc(doc.id)
+            .update({
+              ...doc.data(),
+              checkboxes: checkbox,
+            });
+        });
+        this.setState({
+          tasks: updateTasks,
+        });
+      });
+    }
   };
 
   render() {
     const { data, tasks } = this.state;
-    const { isDark } = this.props;
+    const { isDark, role } = this.props;
     return (
       <div className='content'>
         <Switch>
-          <Route exact path='/' component={About} />
+          {role === 'admin' && (
+            <>
+              <Route exact path='/' component={About} />
 
-          <Route path='/users' exact>
-            <Users data={data} handleDelete={this.handleDelete} handleEdit={this.handleEdit} />
+              <Route path='/users' exact>
+                <Users data={data} handleDelete={this.handleDelete} handleEdit={this.handleEdit} role={role} />
+              </Route>
+
+              <Route path='/users/:id/tasks'>
+                <UserTasks tasks={tasks} data={data} failStatus={this.failStatus} successStatus={this.successStatus} />
+              </Route>
+
+              <Route path='/users/:id/progress'>
+                <UserProgress data={data} tasks={tasks} />
+              </Route>
+
+              <Route path='/new-user'>
+                <NewUser transferData={this.transferData} isDark={isDark} tasks={tasks} />
+              </Route>
+
+              <Route path='/tasks'>
+                <Tasks
+                  tasks={tasks}
+                  handleDelete={this.handleDeleteTask}
+                  handleEditTask={this.handleEditTask}
+                  data={data}
+                  isDark={isDark}
+                />
+              </Route>
+
+              <Route path='/new-task'>
+                <NewTask
+                  data={data}
+                  isDark={isDark}
+                  transferTask={this.transferTask}
+                  transferUserTasks={this.transferUserTasks}
+                />
+              </Route>
+            </>
+          )}
+          {role === 'mentor' && (
+            <>
+              <Route exact path='/' component={About} />
+
+              <Route path='/users' exact>
+                <Users data={data} handleDelete={this.handleDelete} handleEdit={this.handleEdit} role={role} />
+              </Route>
+
+              <Route path='/users/:id/tasks'>
+                <UserTasks tasks={tasks} data={data} failStatus={this.failStatus} successStatus={this.successStatus} />
+              </Route>
+
+              <Route path='/users/:id/progress'>
+                <UserProgress data={data} tasks={tasks} />
+              </Route>
+
+              <Route path='/tasks'>
+                <Tasks
+                  tasks={tasks}
+                  handleDelete={this.handleDeleteTask}
+                  handleEditTask={this.handleEditTask}
+                  data={data}
+                  isDark={isDark}
+                />
+              </Route>
+
+              <Route path='/new-task'>
+                <NewTask
+                  data={data}
+                  isDark={isDark}
+                  transferTask={this.transferTask}
+                  transferUserTasks={this.transferUserTasks}
+                />
+              </Route>
+            </>
+          )}
+          {role === 'user' && (
+            <>
+              <Route exact path='/' component={About} />
+
+              <Route path='/users/tasks'>
+                <UserTasks tasks={tasks} data={data} />
+              </Route>
+
+              {/* <Route path='/users/:id/tasks'>
+                <UserTasks tasks={tasks} data={data} />
+              </Route> */}
+            </>
+          )}
+          <Route path='*'>
+            <Error role={role} />
           </Route>
-
-          <Route path='/users/:id/tasks'>
-            <UserTasks tasks={tasks} data={data} failStatus={this.failStatus} successStatus={this.successStatus} />
-          </Route>
-
-          <Route path='/users/:id/progress'>
-            <UserProgress data={data} tasks={tasks} />
-          </Route>
-
-          <Route path='/new-user'>
-            <NewUser transferData={this.transferData} isDark={isDark} />
-          </Route>
-
-          <Route path='/tasks'>
-            <Tasks
-              tasks={tasks}
-              handleDelete={this.handleDeleteTask}
-              handleEdit={this.handleEditTask}
-              data={data}
-              isDark={isDark}
-              handleCheckbox={this.handleCheckbox}
-            />
-          </Route>
-
-          <Route path='/new-task'>
-            <NewTask
-              transferTasks={this.transferTasks}
-              data={data}
-              handleCheckbox={this.handleCheckbox}
-              isDark={isDark}
-            />
-          </Route>
-
-          <Route path='*' component={Error} />
         </Switch>
       </div>
     );

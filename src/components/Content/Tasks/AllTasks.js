@@ -43,7 +43,7 @@ class AllTasks extends Component {
   };
 
   render() {
-    const { hash, task, handleDelete, handleEdit, data, handleCheckbox, isDark } = this.props;
+    const { hash, task, handleDelete, handleEditTask, data, isDark } = this.props;
     const { isOpen, isOpenEdit } = this.state;
 
     return (
@@ -78,8 +78,7 @@ class AllTasks extends Component {
           isDark={isDark}
           isOpen={isOpenEdit}
           handleButton={this.showModalEdit}
-          handleEdit={handleEdit}
-          handleCheckbox={handleCheckbox}
+          handleEditTask={handleEditTask}
         />
 
         <ModalTask task={task} isOpen={isOpen} handleButton={this.showModal} />

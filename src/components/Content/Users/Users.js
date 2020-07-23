@@ -3,7 +3,7 @@ import User from './User';
 import './Users.sass';
 
 export default function Users(props) {
-  const { data, handleDelete, handleEdit } = props;
+  const { data, handleDelete, handleEdit, role } = props;
   return (
     <div className='users users-animation'>
       {data.length ? (
@@ -25,7 +25,14 @@ export default function Users(props) {
           </div>
           {data.map((item, i) => {
             return (
-              <User dataUser={item} key={item.id} hash={i + 1} handleDelete={handleDelete} handleEdit={handleEdit} />
+              <User
+                dataUser={item}
+                key={item.id}
+                hash={i + 1}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                role={role}
+              />
             );
           })}
         </div>

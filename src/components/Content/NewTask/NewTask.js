@@ -16,25 +16,36 @@ export default class NewTask extends Component {
       startDate: '',
       deadlineDate: '',
       description: '',
-      idMembers: [],
       id: uuidv4(),
       error: '',
       errorInput: '',
-      checkboxes: Array(this.props.data.length).fill(false),
+      checkboxes: this.props.data.map((item) => ({ [item.id]: false })),
+      status: false,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     const tasks = this.state;
-    const { errorInput, error } = this.state;
+    const { data, transferTask, transferUserTasks } = this.props;
+    const { errorInput, error, id: idTask, status } = this.state;
 
     const filterTasks = Object.fromEntries(
       Object.entries(tasks).filter((item) => item[0] !== 'error' && item[0] !== 'errorInput'),
     );
 
-    let userTask = { ...filterTasks, idMembers: true, checkboxes: true, status: true };
+    let userTask = { ...filterTasks, checkboxes: true, status: true };
     userTask = Object.values(userTask).every((val) => !!val);
+
+    const checkboxesArr = data.map((item) => ({ [item.id]: false }));
+    const userTasks = checkboxesArr.map((item) => {
+      const key = Object.keys(item)[0];
+      if (item[key] === true) {
+        return { key, idTask, status };
+      }
+    });
+
+    transferUserTasks(userTasks);
 
     if (userTask && error === '' && errorInput === '') {
       const db = fire.firestore();
@@ -47,16 +58,17 @@ export default class NewTask extends Component {
           console.log('Error ', err.message);
         });
 
+      transferTask(tasks);
+
       this.setState({
         taskName: '',
         startDate: '',
         deadlineDate: '',
         description: '',
         status: '',
-        idMembers: [],
         id: uuidv4(),
         error: '',
-        checkboxes: Array(this.props.data.length).fill(false),
+        checkboxes: checkboxesArr,
       });
     } else if (errorInput === false) {
       this.setState({
@@ -89,29 +101,20 @@ export default class NewTask extends Component {
     });
   };
 
-  handleCheckbox = (id, number, user) => {
-    const { checkboxes, idMembers } = this.state;
-    const { handleCheckbox } = this.props;
+  handleCheckbox = (id) => {
+    const { checkboxes } = this.state;
 
-    const firstArr = checkboxes.slice(0, number);
-    const secondArr = checkboxes.slice(number + 1);
-
-    this.setState({
-      checkboxes: [...firstArr, (checkboxes[number] = !checkboxes[number]), ...secondArr],
+    const checkboxesArr = checkboxes.map((item) => {
+      const objKey = Object.keys(item)[0];
+      if (objKey === id) {
+        return { [objKey]: !item[id] };
+      }
+      return item;
     });
 
-    if (!idMembers.includes(id)) {
-      this.setState({
-        idMembers: [...idMembers, id],
-      });
-    } else {
-      const filterIdMembers = idMembers.filter((item) => item !== id);
-      this.setState({
-        idMembers: filterIdMembers,
-      });
-    }
-
-    handleCheckbox(id, number, user);
+    this.setState({
+      checkboxes: checkboxesArr,
+    });
   };
 
   isError = () => {
@@ -216,7 +219,7 @@ export default class NewTask extends Component {
                           user={item}
                           number={i}
                           handleCheckbox={this.handleCheckbox}
-                          isActive={checkboxes[i]}
+                          isActive={checkboxes.length ? checkboxes[i][item.id] : null}
                         />
                       </div>
                     );

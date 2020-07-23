@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import './App.sass';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Content from './components/Content/Content';
 import Footer from './components/Footer/Footer';
 import HeaderModal from './components/Header/Modal/Modal';
 import fire from './config/Fire';
 import LoginRegister from './components/LoginRegister/LoginRegister';
-import ButtonWithIcon from './components/UI/ButtonWithIcon';
 import './components/Header/Header.sass';
 
 class App extends Component {
@@ -72,6 +71,10 @@ class App extends Component {
       this.setState({
         role: 'admin',
       });
+    } else if (role === 'mentor') {
+      this.setState({
+        role: 'mentor',
+      });
     } else {
       this.setState({
         role: 'user',
@@ -82,12 +85,20 @@ class App extends Component {
   authListener() {
     fire.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({
-          user,
-        });
+        if (user.email === 'admin@gmail.com') {
+          this.setState({
+            user,
+            role: 'admin',
+          });
+        } else {
+          this.setState({
+            user,
+          });
+        }
       } else {
         this.setState({
           user: '',
+          role: '',
         });
       }
     });
@@ -102,7 +113,7 @@ class App extends Component {
           <>
             <div className={`App ${isDark ? 'theme-dark' : ''}`}>
               <Header showModal={this.showModal} role={role} />
-              <Content isDark={isDark} />
+              <Content isDark={isDark} role={role} />
               <Footer />
             </div>
             <HeaderModal
@@ -110,17 +121,13 @@ class App extends Component {
               isDark={isDark}
               handleButton={this.showModal}
               handleCheckbox={this.handleSwitchColor}
+              logOut={this.logOut}
             />
           </>
         ) : (
           <>
             <div className={`App ${isDark ? 'theme-dark' : ''}`}>
-              <Header showModal={this.showModal}>
-                <div className='role'>{formName}</div>
-                <ButtonWithIcon className='settings' showModal={this.showModal}>
-                  <i className='fa fa-cogs' />
-                </ButtonWithIcon>
-              </Header>
+              <Header showModal={this.showModal} formName={formName} role={role} />
               <LoginRegister characterRole={this.checkRole} />
               <Footer />
             </div>

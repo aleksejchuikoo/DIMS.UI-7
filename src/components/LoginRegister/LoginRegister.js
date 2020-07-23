@@ -25,6 +25,8 @@ export default class LoginRegister extends Component {
     e.preventDefault();
     const { email, password } = this.state;
     const { characterRole } = this.props;
+    const db = fire.firestore();
+
     fire
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -36,6 +38,15 @@ export default class LoginRegister extends Component {
 
     if (email === 'admin@gmail.com') {
       characterRole('admin');
+    } else {
+      db.collection('Users').onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          if (doc.data().email === email && doc.data().password === password) {
+            console.log('role', doc.data().role);
+            characterRole(doc.data().role);
+          }
+        });
+      });
     }
   };
 

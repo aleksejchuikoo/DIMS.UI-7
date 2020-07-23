@@ -47,7 +47,6 @@ export default class NewUser extends Component {
       email: '',
       skype: '',
       phone: '+_ (___) ___-__-__',
-      isActive: false,
       id: uuidv4(),
       error: '',
       errorInput: '',
@@ -111,18 +110,19 @@ export default class NewUser extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const data = this.state;
-    const { errorInput, error } = this.state;
+    const { errorInput, error, id, email, role } = this.state;
+    const { transferData, tasks } = this.props;
 
+    const db = fire.firestore();
     const filterData = Object.fromEntries(
       Object.entries(data).filter((item) => item[0] !== 'error' && item[0] !== 'errorInput'),
     );
 
-    let userInfo = { ...filterData, isActive: true };
+    let userInfo = { ...filterData };
     userInfo = Object.values(userInfo).every((val) => !!val);
 
     if (userInfo && error === '' && errorInput === '') {
-      const db = fire.firestore();
-      db.collection('Data')
+      db.collection('Members')
         .doc(data.id)
         .set({
           ...data,
@@ -130,6 +130,44 @@ export default class NewUser extends Component {
         .catch((err) => {
           console.log('Error ', err.message);
         });
+
+      fire
+        .auth()
+        .createUserWithEmailAndPassword(email, '12345678')
+        .catch((errorMessage) => {
+          console.log('Error in NewUser', errorMessage.message);
+        });
+
+      db.collection('Users')
+        .doc(data.id)
+        .set({
+          role,
+          email,
+          id,
+          password: '12345678',
+        })
+        .catch((err) => {
+          console.log('Error ', err.message);
+        });
+
+      transferData(data);
+
+      const checkbox = tasks[0].checkboxes.concat({ [id]: false });
+      db.collection('Tasks').onSnapshot((querySnapshot) => {
+        const updateTasks = [];
+        querySnapshot.forEach((doc) => {
+          updateTasks.push({ ...doc.data(), checkboxes: checkbox });
+          db.collection('Tasks')
+            .doc(doc.id)
+            .update({
+              ...doc.data(),
+              checkboxes: checkbox,
+            });
+        });
+        this.setState({
+          tasks: updateTasks,
+        });
+      });
 
       this.setState({
         firstName: '',
@@ -145,7 +183,6 @@ export default class NewUser extends Component {
         email: '',
         skype: '',
         phone: '+_ (___) ___-__-__',
-        isActive: false,
         id: uuidv4(),
         error: '',
         errorInput: '',

@@ -6,7 +6,7 @@ import Button from '../../UI/Button';
 import ModalUser from './ModalUser';
 import ModalUserEdit from './ModalUserEdit';
 
-export default function User({ dataUser, hash, handleDelete, handleEdit }) {
+export default function User({ dataUser, hash, handleDelete, handleEdit, role }) {
   const [isOpen, openModal] = useState(false);
   const [isOpenEdit, editData] = useState(false);
 
@@ -75,14 +75,16 @@ export default function User({ dataUser, hash, handleDelete, handleEdit }) {
                 <Button action='showProgress'>Progress</Button>
               </Link>
             </div>
-            <div className='users__wrapper_row'>
-              <Button action='edit' handleButton={showModalEdit}>
-                Edit
-              </Button>
-              <Button action='delete' handleButton={() => handleDelete(dataUser.id)}>
-                Delete
-              </Button>
-            </div>
+            {role === 'admin' ? (
+              <div className='users__wrapper_row'>
+                <Button action='edit' handleButton={showModalEdit}>
+                  Edit
+                </Button>
+                <Button action='delete' handleButton={() => handleDelete(dataUser.id)}>
+                  Delete
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

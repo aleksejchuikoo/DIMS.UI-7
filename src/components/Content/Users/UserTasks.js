@@ -11,6 +11,7 @@ class UserTasks extends Component {
     this.state = {
       name: '',
       tasks: [],
+      id: '',
     };
   }
 
@@ -20,12 +21,15 @@ class UserTasks extends Component {
     const { data, tasks } = props;
 
     const dataItem = data.find((item) => item.id === id);
-    const dataTask = tasks.filter((item) => item.idMembers.includes(id));
+    const dataTask = tasks.filter(({ checkboxes }) => {
+      return checkboxes.find((item) => item[id] && item[id] === true);
+    });
 
     return {
       ...state,
       name: dataItem.firstName,
       tasks: dataTask,
+      id,
     };
   }
 

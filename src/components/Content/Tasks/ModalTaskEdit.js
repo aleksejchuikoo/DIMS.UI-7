@@ -17,8 +17,7 @@ export default class ModalUserEdit extends Component {
       description: '',
       error: '',
       errorInput: '',
-      idMembers: this.props.task.idMembers,
-      checkboxes: Array(this.props.data.length).fill(false),
+      checkboxes: this.props.task.checkboxes,
     };
   }
 
@@ -28,33 +27,28 @@ export default class ModalUserEdit extends Component {
       startDate: this.props.task.startDate,
       deadlineDate: this.props.task.deadlineDate,
       description: this.props.task.description,
+      checkboxes: this.props.task.checkboxes,
       error: '',
       errorInput: '',
-      idMembers: this.props.task.idMembers,
-      checkboxes: this.props.task.checkboxes,
     });
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     const task = this.state;
-    const { handleEdit, handleButton } = this.props;
+    const { handleEditTask, handleButton } = this.props;
     const { errorInput, error } = this.state;
 
     const filterTasks = Object.fromEntries(
       Object.entries(task).filter((item) => item[0] !== 'error' && item[0] !== 'errorInput'),
     );
-    console.log(error);
-    console.log(errorInput);
 
-    let userTask = { ...filterTasks, idMembers: true, checkboxes: true };
+    let userTask = { ...filterTasks, checkboxes: true };
     userTask = Object.values(userTask).every((val) => !!val);
-    console.log(userTask);
 
     if (userTask && error === '' && errorInput === '') {
-      handleEdit(task, this.props.task.id);
+      handleEditTask(task, this.props.task.id);
     } else if (errorInput === false) {
-      console.log('error');
       this.setState({
         errorInput: true,
       });
@@ -63,6 +57,7 @@ export default class ModalUserEdit extends Component {
         error: true,
       });
     }
+
     handleButton(e);
   };
 
@@ -86,29 +81,20 @@ export default class ModalUserEdit extends Component {
     });
   };
 
-  handleCheckbox = (id, number, user) => {
-    const { checkboxes, idMembers } = this.state;
-    const { handleCheckbox } = this.props;
+  handleCheckbox = (id) => {
+    const { checkboxes } = this.state;
 
-    const firstArr = checkboxes.slice(0, number);
-    const secondArr = checkboxes.slice(number + 1);
-
-    this.setState({
-      checkboxes: [...firstArr, (checkboxes[number] = !checkboxes[number]), ...secondArr],
+    const checkboxesArr = checkboxes.map((item) => {
+      const objKey = Object.keys(item)[0];
+      if (objKey === id) {
+        return { [objKey]: !item[id] };
+      }
+      return item;
     });
 
-    if (!idMembers.includes(id)) {
-      this.setState({
-        idMembers: [...idMembers, id],
-      });
-    } else {
-      const filterIdMembers = idMembers.filter((item) => item !== id);
-      this.setState({
-        idMembers: filterIdMembers,
-      });
-    }
-
-    handleCheckbox(id, number, user);
+    this.setState({
+      checkboxes: checkboxesArr,
+    });
   };
 
   isError = () => {
@@ -221,7 +207,7 @@ export default class ModalUserEdit extends Component {
                             user={item}
                             number={i}
                             handleCheckbox={this.handleCheckbox}
-                            isActive={checkboxes[i]}
+                            isActive={checkboxes.length ? checkboxes[i][item.id] : null}
                           />
                         </div>
                       );

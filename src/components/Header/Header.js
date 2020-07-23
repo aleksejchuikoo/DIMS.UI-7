@@ -4,13 +4,11 @@ import HeaderNavLink from './HeaderNavLink';
 import ButtonWithIcon from '../UI/ButtonWithIcon';
 
 export default function Header(props) {
-  const { showModal, children, role } = props;
+  const { showModal, formName, role } = props;
 
   return (
     <div className='header'>
-      {children ? (
-        children
-      ) : (
+      {role === 'admin' && (
         <>
           <div className='role'>{role}</div>
           <ul className='nav'>
@@ -27,13 +25,47 @@ export default function Header(props) {
               <HeaderNavLink to='/new-task'>New task</HeaderNavLink>
             </li>
           </ul>
-          <div>
-            <ButtonWithIcon className='settings' showModal={showModal}>
-              <i className='fa fa-cogs' />
-            </ButtonWithIcon>
-          </div>
         </>
       )}
+      {role === 'mentor' && (
+        <>
+          <div className='role'>{role}</div>
+          <ul className='nav'>
+            <li className='nav__item'>
+              <HeaderNavLink to='/users'>Members</HeaderNavLink>
+            </li>
+            <li className='nav__item'>
+              <HeaderNavLink to='/tasks'>Tasks</HeaderNavLink>
+            </li>
+            <li className='nav__item'>
+              <HeaderNavLink to='/new-task'>New task</HeaderNavLink>
+            </li>
+          </ul>
+        </>
+      )}
+      {role === 'user' && (
+        <>
+          <div className='role'>{role}</div>
+          <ul className='nav'>
+            <li className='nav__item'>
+              <HeaderNavLink to='/tasks'>My Tasks</HeaderNavLink>
+            </li>
+            <li className='nav__item'>
+              <HeaderNavLink to='/new-task'>Tracking</HeaderNavLink>
+            </li>
+          </ul>
+        </>
+      )}
+      {role === '' && (
+        <>
+          <div className='role'>{formName}</div>
+        </>
+      )}
+      <div>
+        <ButtonWithIcon className='settings' showModal={showModal}>
+          <i className='fa fa-cogs' />
+        </ButtonWithIcon>
+      </div>
     </div>
   );
 }
