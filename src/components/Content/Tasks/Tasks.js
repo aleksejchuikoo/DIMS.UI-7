@@ -3,7 +3,7 @@ import '../Users/Users.sass';
 import AllTasks from './AllTasks';
 
 export default function Tasks(props) {
-  const { tasks, handleDelete, handleEditTask, data, isDark } = props;
+  const { tasks, handleDelete, handleEditTask, data, isDark, userTasks, transferUserTasks } = props;
   return (
     <div className='users users-animation'>
       {tasks.length ? (
@@ -32,6 +32,8 @@ export default function Tasks(props) {
                 isDark={isDark}
                 handleDelete={handleDelete}
                 handleEditTask={handleEditTask}
+                userTasks={userTasks}
+                transferUserTasks={transferUserTasks}
               />
             );
           })}

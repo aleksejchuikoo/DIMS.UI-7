@@ -20,7 +20,7 @@ export default class NewTask extends Component {
       error: '',
       errorInput: '',
       checkboxes: this.props.data.map((item) => ({ [item.id]: false })),
-      status: false,
+      status: '',
     };
   }
 
@@ -28,7 +28,7 @@ export default class NewTask extends Component {
     e.preventDefault();
     const tasks = this.state;
     const { data, transferTask, transferUserTasks } = this.props;
-    const { errorInput, error, id: idTask, status } = this.state;
+    const { errorInput, error, status, checkboxes } = this.state;
 
     const filterTasks = Object.fromEntries(
       Object.entries(tasks).filter((item) => item[0] !== 'error' && item[0] !== 'errorInput'),
@@ -38,14 +38,6 @@ export default class NewTask extends Component {
     userTask = Object.values(userTask).every((val) => !!val);
 
     const checkboxesArr = data.map((item) => ({ [item.id]: false }));
-    const userTasks = checkboxesArr.map((item) => {
-      const key = Object.keys(item)[0];
-      if (item[key] === true) {
-        return { key, idTask, status };
-      }
-    });
-
-    transferUserTasks(userTasks);
 
     if (userTask && error === '' && errorInput === '') {
       const db = fire.firestore();
@@ -58,6 +50,29 @@ export default class NewTask extends Component {
           console.log('Error ', err.message);
         });
 
+      const userTasks = checkboxes.map((item) => {
+        const idUserTasks = uuidv4();
+        if (Object.values(item)[0]) {
+          db.collection('UserTasks')
+            .doc(idUserTasks)
+            .set({
+              itemId: Object.keys(item)[0],
+              taskId: tasks.id,
+              status,
+              id: idUserTasks,
+            })
+            .catch((err) => {
+              console.log('Error ', err.message);
+            });
+          return {
+            itemId: Object.keys(item)[0],
+            taskId: tasks.id,
+            status,
+            id: idUserTasks,
+          };
+        }
+      });
+      transferUserTasks(userTasks);
       transferTask(tasks);
 
       this.setState({

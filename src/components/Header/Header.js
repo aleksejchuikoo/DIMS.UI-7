@@ -4,7 +4,7 @@ import HeaderNavLink from './HeaderNavLink';
 import ButtonWithIcon from '../UI/ButtonWithIcon';
 
 export default function Header(props) {
-  const { showModal, formName, role } = props;
+  const { showModal, formName, role, idUser } = props;
 
   return (
     <div className='header'>
@@ -48,7 +48,7 @@ export default function Header(props) {
           <div className='role'>{role}</div>
           <ul className='nav'>
             <li className='nav__item'>
-              <HeaderNavLink to='/tasks'>My Tasks</HeaderNavLink>
+              <HeaderNavLink to={`/users/${idUser}/tasks}`}>My Tasks</HeaderNavLink>
             </li>
             <li className='nav__item'>
               <HeaderNavLink to='/new-task'>Tracking</HeaderNavLink>

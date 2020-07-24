@@ -66,7 +66,7 @@ export default function User({ dataUser, hash, handleDelete, handleEdit, role })
         <div className='users__wrapper_item'>{parseDate(birthday)}</div>
         <div className='users__wrapper_item'>
           <div className='users__wrapper_column'>
-            <div className='users__wrapper_row'>
+            <div className='users__wrapper_row' style={role === 'mentor' ? { marginBottom: '0' } : null}>
               <Link to={`/users/${id}/tasks`}>
                 <Button action='showTasks'>Tasks</Button>
               </Link>

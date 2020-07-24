@@ -17,14 +17,17 @@ class UserTasks extends Component {
 
   static getDerivedStateFromProps(props, state) {
     const id = props.match.params.id;
+    console.log(id);
 
     const { data, tasks } = props;
+    console.log(data);
+    console.log(tasks);
 
     const dataItem = data.find((item) => item.id === id);
     const dataTask = tasks.filter(({ checkboxes }) => {
       return checkboxes.find((item) => item[id] && item[id] === true);
     });
-
+    console.log(dataTask);
     return {
       ...state,
       name: dataItem.firstName,
@@ -43,12 +46,12 @@ class UserTasks extends Component {
           {tasks.length ? (
             <p className='task-title'>
               <i className='fa fa-tasks' />
-              {name} tasks
+              {`${name} tasks`}
             </p>
           ) : (
             <p className='task-warning'>
               <i className='fa fa-warning' />
-              {name} has no tasks
+              {`${name} has no tasks`}
             </p>
           )}
         </div>

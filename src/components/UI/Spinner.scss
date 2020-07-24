@@ -1,0 +1,46 @@
+@import '../../variables.sass';
+
+.loader {
+  width: 200px;
+  height: 200px;
+  padding: 0;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  margin: auto;
+  list-style-type: none;
+  transform: scale(0.4);
+  li {
+    border: 5px solid transparent;
+    border-top-color: darken($bg-footer_header, 20%);
+    border-left-color: darken($bg-footer_header, 20%);
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    right: -100%;
+    bottom: -100%;
+    margin: auto;
+    border-radius: 5000px;
+    transform: rotate(45deg);
+    animation: animate 3s ease infinite;
+  }
+  @for $i from 1 through 15 {
+    li:nth-child(#{$i}) {
+      height: #{$i * 30}px;
+      width: #{$i * 30}px;
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+}
+@keyframes animate {
+  0%,
+  100% {
+    transform: rotate(45deg);
+  }
+  50%,
+  60% {
+    transform: rotate(-315deg);
+  }
+}

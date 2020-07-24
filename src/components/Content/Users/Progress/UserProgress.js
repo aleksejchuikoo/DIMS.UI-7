@@ -36,12 +36,12 @@ class UserProgress extends Component {
           {tasks.length ? (
             <p className='task-title'>
               <i className='fa fa-calendar' />
-              {name} progress
+              {`${name} progress`}
             </p>
           ) : (
             <p className='task-warning'>
               <i className='fa fa-warning' />
-              {name} has no tasks
+              {`${name} has no tasks`}
             </p>
           )}
         </div>

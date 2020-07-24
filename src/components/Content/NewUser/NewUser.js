@@ -186,6 +186,7 @@ export default class NewUser extends Component {
         id: uuidv4(),
         error: '',
         errorInput: '',
+        role: 'user',
       });
     } else if (errorInput === false) {
       this.setState({

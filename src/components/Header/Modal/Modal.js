@@ -4,6 +4,7 @@ import Button from '../../UI/Button';
 import CheckboxButton from '../../UI/CheckboxButton';
 import './Modal.sass';
 import fire from '../../../config/Fire';
+import { NavLink } from 'react-router-dom';
 
 export default function HeaderModal(props) {
   const { handleButton, handleCheckbox, isDark, isOpen, fromRegistry } = props;
@@ -28,9 +29,11 @@ export default function HeaderModal(props) {
         </div>
         {fromRegistry ? null : (
           <div className='headerModal__footer'>
-            <Button action='leave' handleButton={logout}>
-              Logout
-            </Button>
+            <NavLink to='/login'>
+              <Button action='leave' handleButton={logout}>
+                Logout
+              </Button>
+            </NavLink>
           </div>
         )}
       </div>

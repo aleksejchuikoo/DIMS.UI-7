@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import '../NewUser/NewUser.sass';
 import '../../Header/Modal/Modal.sass';
+import { v4 as uuidv4 } from 'uuid';
 import Date from '../../UI/Date';
 import Button from '../../UI/Button';
 import CheckboxButton from '../../UI/CheckboxButton';
 import ModalError from '../ModalError/ModalError';
+import fire from '../../../config/Fire';
 
 export default class ModalUserEdit extends Component {
   constructor(props) {
@@ -36,8 +38,9 @@ export default class ModalUserEdit extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const task = this.state;
-    const { handleEditTask, handleButton } = this.props;
-    const { errorInput, error } = this.state;
+    const db = fire.firestore();
+    const { handleEditTask, handleButton, task: idTask, transferUserTasks } = this.props;
+    const { errorInput, error, checkboxes } = this.state;
 
     const filterTasks = Object.fromEntries(
       Object.entries(task).filter((item) => item[0] !== 'error' && item[0] !== 'errorInput'),
@@ -47,7 +50,50 @@ export default class ModalUserEdit extends Component {
     userTask = Object.values(userTask).every((val) => !!val);
 
     if (userTask && error === '' && errorInput === '') {
-      handleEditTask(task, this.props.task.id);
+      checkboxes.forEach((item) => {
+        if (Object.values(item)[0]) {
+          let flag = false;
+          db.collection('UserTasks').onSnapshot((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              if (doc.data().taskId === idTask.id && doc.data().itemId === Object.keys(item)[0]) {
+                flag = true;
+              }
+            });
+          });
+          if (flag === false) {
+            const idUserTasks = uuidv4();
+            db.collection('UserTasks')
+              .doc(idUserTasks)
+              .set({
+                itemId: Object.keys(item)[0],
+                taskId: idTask.id,
+                status: '',
+                id: idUserTasks,
+              })
+              .catch((err) => {
+                console.log('Error ', err.message);
+              });
+            const transferUserTask = {
+              itemId: Object.keys(item)[0],
+              taskId: idTask.id,
+              status: '',
+              id: idUserTasks,
+            };
+            transferUserTasks(transferUserTask);
+          }
+        } else {
+          db.collection('UserTasks').onSnapshot((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              if (doc.data().taskId === idTask.id && doc.data().itemId === Object.keys(item)[0]) {
+                db.collection('UserTasks')
+                  .doc(doc.data().id)
+                  .delete();
+              }
+            });
+          });
+        }
+      });
+      handleEditTask(task, idTask.id);
     } else if (errorInput === false) {
       this.setState({
         errorInput: true,

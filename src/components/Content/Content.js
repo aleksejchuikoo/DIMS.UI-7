@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Content.sass';
 import { Route, Switch } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import Users from './Users/Users';
 import NewUser from './NewUser/NewUser';
 import Tasks from './Tasks/Tasks';
@@ -11,6 +10,7 @@ import UserProgress from './Users/Progress/UserProgress';
 import Error from './404/Error';
 import About from './About/About';
 import fire from '../../config/Fire';
+import Spinner from '../UI/Spinner';
 
 export default class Content extends Component {
   constructor(props) {
@@ -19,10 +19,19 @@ export default class Content extends Component {
       data: [],
       tasks: [],
       userTasks: [],
+      isFetching: false,
     };
   }
 
   componentDidMount() {
+    this.setState({
+      isFetching: true,
+    });
+
+    setTimeout(this.delayData, 1500);
+  }
+
+  delayData = () => {
     const db = fire.firestore();
     db.collection('Members').onSnapshot((querySnapshot) => {
       const data = [];
@@ -31,6 +40,7 @@ export default class Content extends Component {
       });
       this.setState({
         data,
+        isFetching: false,
       });
     });
 
@@ -41,9 +51,21 @@ export default class Content extends Component {
       });
       this.setState({
         tasks,
+        isFetching: false,
       });
     });
-  }
+
+    db.collection('UserTasks').onSnapshot((querySnapshot) => {
+      const userTasks = [];
+      querySnapshot.forEach((doc) => {
+        userTasks.push(doc.data());
+      });
+      this.setState({
+        userTasks,
+        isFetching: false,
+      });
+    });
+  };
 
   transferData = (dataUser) => {
     const { data } = this.state;
@@ -59,9 +81,10 @@ export default class Content extends Component {
     });
   };
 
-  transferUserTasks = (userTasks) => {
+  transferUserTasks = (userTask) => {
+    const { userTasks } = this.state;
     this.setState({
-      userTasks,
+      userTasks: [...userTasks, { ...userTask }],
     });
   };
 
@@ -101,6 +124,7 @@ export default class Content extends Component {
   };
 
   handleEditTask = (editTask, idTask) => {
+    console.log(editTask, idTask);
     const { tasks } = this.state;
     const db = fire.firestore();
     db.collection('Tasks')
@@ -134,6 +158,21 @@ export default class Content extends Component {
       });
       this.setState({
         tasks,
+      });
+    });
+
+    db.collection('UserTasks').onSnapshot((querySnapshot) => {
+      const userTasks = [];
+      querySnapshot.forEach((doc) => {
+        if (doc.data().taskId === id) {
+          db.collection('UserTasks')
+            .doc(doc.data().id)
+            .delete();
+        }
+        userTasks.push(doc.data());
+      });
+      this.setState({
+        userTasks,
       });
     });
   };
@@ -182,12 +221,14 @@ export default class Content extends Component {
   };
 
   render() {
-    const { data, tasks } = this.state;
+    const { data, tasks, userTasks, isFetching } = this.state;
     const { isDark, role } = this.props;
     return (
       <div className='content'>
         <Switch>
-          {role === 'admin' && (
+          {role === 'admin' && isFetching ? (
+            <Spinner />
+          ) : (
             <>
               <Route exact path='/' component={About} />
 
@@ -214,6 +255,7 @@ export default class Content extends Component {
                   handleEditTask={this.handleEditTask}
                   data={data}
                   isDark={isDark}
+                  transferUserTasks={this.transferUserTasks}
                 />
               </Route>
 
@@ -227,7 +269,9 @@ export default class Content extends Component {
               </Route>
             </>
           )}
-          {role === 'mentor' && (
+          {role === 'mentor' && isFetching ? (
+            <Spinner />
+          ) : (
             <>
               <Route exact path='/' component={About} />
 
@@ -250,6 +294,7 @@ export default class Content extends Component {
                   handleEditTask={this.handleEditTask}
                   data={data}
                   isDark={isDark}
+                  userTasks={userTasks}
                 />
               </Route>
 
@@ -263,17 +308,15 @@ export default class Content extends Component {
               </Route>
             </>
           )}
-          {role === 'user' && (
+          {role === 'user' && isFetching ? (
+            <Spinner />
+          ) : (
             <>
               <Route exact path='/' component={About} />
 
-              <Route path='/users/tasks'>
+              <Route path='/users/:id/tasks'>
                 <UserTasks tasks={tasks} data={data} />
               </Route>
-
-              {/* <Route path='/users/:id/tasks'>
-                <UserTasks tasks={tasks} data={data} />
-              </Route> */}
             </>
           )}
           <Route path='*'>

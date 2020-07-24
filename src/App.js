@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.sass';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Content from './components/Content/Content';
 import Footer from './components/Footer/Footer';
@@ -8,6 +8,8 @@ import HeaderModal from './components/Header/Modal/Modal';
 import fire from './config/Fire';
 import LoginRegister from './components/LoginRegister/LoginRegister';
 import './components/Header/Header.sass';
+import Spinner from './components/UI/Spinner';
+import Error from './components/Content/404/Error';
 
 class App extends Component {
   constructor(props) {
@@ -19,6 +21,8 @@ class App extends Component {
       user: '',
       role: '',
       formName: 'login',
+      isFetching: false,
+      idUser: '',
     };
   }
 
@@ -35,6 +39,9 @@ class App extends Component {
       });
     }
 
+    this.setState({
+      isFetching: true,
+    });
     this.authListener();
   }
 
@@ -66,22 +73,6 @@ class App extends Component {
     }
   };
 
-  checkRole = (role) => {
-    if (role === 'admin') {
-      this.setState({
-        role: 'admin',
-      });
-    } else if (role === 'mentor') {
-      this.setState({
-        role: 'mentor',
-      });
-    } else {
-      this.setState({
-        role: 'user',
-      });
-    }
-  };
-
   authListener() {
     fire.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -89,31 +80,45 @@ class App extends Component {
           this.setState({
             user,
             role: 'admin',
+            isFetching: false,
           });
         } else {
-          this.setState({
-            user,
+          const db = fire.firestore();
+          db.collection('Users').onSnapshot((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              if (doc.data().email === user.email) {
+                this.setState({
+                  user,
+                  role: doc.data().role,
+                  isFetching: false,
+                  idUser: doc.data().id,
+                });
+              }
+            });
           });
         }
       } else {
         this.setState({
           user: '',
           role: '',
+          isFetching: false,
         });
       }
     });
   }
 
   render() {
-    const { isOpen, isDark, user, role, formName } = this.state;
+    const { isOpen, isDark, user, role, formName, isFetching, idUser } = this.state;
 
     return (
       <BrowserRouter>
         {user ? (
           <>
+            {(role === 'admin' || role === 'mentor') && <Redirect from='/login' to='/users' />}
+            {role === 'user' && <Redirect from='/login' to={`/users/${idUser}/tasks}`} />}
             <div className={`App ${isDark ? 'theme-dark' : ''}`}>
-              <Header showModal={this.showModal} role={role} />
-              <Content isDark={isDark} role={role} />
+              <Header showModal={this.showModal} role={role} idUser={idUser} />
+              <Content isDark={isDark} role={role} idUser={idUser} />
               <Footer />
             </div>
             <HeaderModal
@@ -126,11 +131,13 @@ class App extends Component {
           </>
         ) : (
           <>
-            <div className={`App ${isDark ? 'theme-dark' : ''}`}>
-              <Header showModal={this.showModal} formName={formName} role={role} />
-              <LoginRegister characterRole={this.checkRole} />
-              <Footer />
-            </div>
+            <Route path='/login'>
+              <div className={`App ${isDark ? 'theme-dark' : ''}`}>
+                <Header showModal={this.showModal} formName={formName} role={role} />
+                {isFetching ? <Spinner /> : <LoginRegister />}
+                <Footer />
+              </div>
+            </Route>
             <HeaderModal
               isOpen={isOpen}
               isDark={isDark}
