@@ -164,9 +164,6 @@ export default class NewUser extends Component {
               checkboxes: checkbox,
             });
         });
-        this.setState({
-          tasks: updateTasks,
-        });
       });
 
       this.setState({
@@ -394,7 +391,7 @@ export default class NewUser extends Component {
                   <label>Sex:</label>
                 </div>
                 <div className='newUser__form_wrapper-input'>
-                  <RadioButtons name='sex' value={sex} changeRadio={this.handleComponent} />
+                  <RadioButtons name='sex' value={sex.toLowerCase()} changeRadio={this.handleComponent} />
                 </div>
               </div>
               <div className='newUser__form_wrapper-inner wrapper-inner-score'>

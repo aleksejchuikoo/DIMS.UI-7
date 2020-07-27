@@ -3,6 +3,7 @@ import './Users.sass';
 import { withRouter } from 'react-router-dom';
 import Task from '../Tasks/Task';
 import Back from '../../UI/Back';
+import fire from '../../../config/Fire';
 
 class UserTasks extends Component {
   constructor(props) {
@@ -17,17 +18,12 @@ class UserTasks extends Component {
 
   static getDerivedStateFromProps(props, state) {
     const id = props.match.params.id;
-    console.log(id);
 
     const { data, tasks } = props;
-    console.log(data);
-    console.log(tasks);
-
     const dataItem = data.find((item) => item.id === id);
     const dataTask = tasks.filter(({ checkboxes }) => {
       return checkboxes.find((item) => item[id] && item[id] === true);
     });
-    console.log(dataTask);
     return {
       ...state,
       name: dataItem.firstName,
@@ -38,10 +34,10 @@ class UserTasks extends Component {
 
   render() {
     const { name, tasks } = this.state;
-    const { failStatus, successStatus } = this.props;
+    const { failStatus, successStatus, role } = this.props;
     return (
       <div className='users'>
-        <Back />
+        {role !== 'user' && <Back />}
         <div className='users__tasks-title'>
           {tasks.length ? (
             <p className='task-title'>

@@ -27,7 +27,7 @@ class AllTasks extends Component {
     }
   };
 
-  showModalEdit = (e) => {
+  showModalEdit = (e, checkboxes) => {
     const { isOpenEdit } = this.state;
     e.preventDefault();
 

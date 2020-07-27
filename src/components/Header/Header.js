@@ -48,10 +48,10 @@ export default function Header(props) {
           <div className='role'>{role}</div>
           <ul className='nav'>
             <li className='nav__item'>
-              <HeaderNavLink to={`/users/${idUser}/tasks}`}>My Tasks</HeaderNavLink>
+              <HeaderNavLink to={`/users/${idUser}/tasks`}>My Tasks</HeaderNavLink>
             </li>
             <li className='nav__item'>
-              <HeaderNavLink to='/new-task'>Tracking</HeaderNavLink>
+              <HeaderNavLink to='/tracking'>Tracking</HeaderNavLink>
             </li>
           </ul>
         </>

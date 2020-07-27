@@ -52,35 +52,32 @@ export default class ModalUserEdit extends Component {
     if (userTask && error === '' && errorInput === '') {
       checkboxes.forEach((item) => {
         if (Object.values(item)[0]) {
-          let flag = false;
           db.collection('UserTasks').onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               if (doc.data().taskId === idTask.id && doc.data().itemId === Object.keys(item)[0]) {
-                flag = true;
+                const idUserTasks = uuidv4();
+                // db.collection('UserTasks')
+                //   .doc(idUserTasks)
+                //   .set({
+                //     itemId: Object.keys(item)[0],
+                //     taskId: idTask.id,
+                //     status: '',
+                //     id: idUserTasks,
+                //   })
+                //   .catch((err) => {
+                //     console.log('Error ', err.message);
+                //   });
+                const transferUserTask = {
+                  itemId: Object.keys(item)[0],
+                  taskId: idTask.id,
+                  status: '',
+                  id: idUserTasks,
+                };
+                console.log(transferUserTask);
+                transferUserTasks(transferUserTask);
               }
             });
           });
-          if (flag === false) {
-            const idUserTasks = uuidv4();
-            db.collection('UserTasks')
-              .doc(idUserTasks)
-              .set({
-                itemId: Object.keys(item)[0],
-                taskId: idTask.id,
-                status: '',
-                id: idUserTasks,
-              })
-              .catch((err) => {
-                console.log('Error ', err.message);
-              });
-            const transferUserTask = {
-              itemId: Object.keys(item)[0],
-              taskId: idTask.id,
-              status: '',
-              id: idUserTasks,
-            };
-            transferUserTasks(transferUserTask);
-          }
         } else {
           db.collection('UserTasks').onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {

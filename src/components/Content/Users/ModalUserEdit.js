@@ -349,7 +349,11 @@ export default class ModalUserEdit extends Component {
                     <label>Sex:</label>
                   </div>
                   <div className='newUser__form_wrapper-input'>
-                    <RadioButtons name='sex' value={sex ? sex : dataUser.sex} changeRadio={this.handleComponent} />
+                    <RadioButtons
+                      name='sex'
+                      value={sex ? sex.toLowerCase() : dataUser.sex.toLowerCase()}
+                      changeRadio={this.handleComponent}
+                    />
                   </div>
                 </div>
                 <div className='newUser__form_wrapper-inner'>

@@ -115,7 +115,7 @@ class App extends Component {
         {user ? (
           <>
             {(role === 'admin' || role === 'mentor') && <Redirect from='/login' to='/users' />}
-            {role === 'user' && <Redirect from='/login' to={`/users/${idUser}/tasks}`} />}
+            {role === 'user' && <Redirect from='/login' to={`/users/${idUser}/tasks`} />}
             <div className={`App ${isDark ? 'theme-dark' : ''}`}>
               <Header showModal={this.showModal} role={role} idUser={idUser} />
               <Content isDark={isDark} role={role} idUser={idUser} />
@@ -131,6 +131,7 @@ class App extends Component {
           </>
         ) : (
           <>
+            {role === '' && <Redirect from='/' to='/login' />}
             <Route path='/login'>
               <div className={`App ${isDark ? 'theme-dark' : ''}`}>
                 <Header showModal={this.showModal} formName={formName} role={role} />

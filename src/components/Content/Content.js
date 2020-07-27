@@ -11,6 +11,7 @@ import Error from './404/Error';
 import About from './About/About';
 import fire from '../../config/Fire';
 import Spinner from '../UI/Spinner';
+import Tracks from './Tracks/Tracks';
 
 export default class Content extends Component {
   constructor(props) {
@@ -124,7 +125,6 @@ export default class Content extends Component {
   };
 
   handleEditTask = (editTask, idTask) => {
-    console.log(editTask, idTask);
     const { tasks } = this.state;
     const db = fire.firestore();
     db.collection('Tasks')
@@ -315,7 +315,11 @@ export default class Content extends Component {
               <Route exact path='/' component={About} />
 
               <Route path='/users/:id/tasks'>
-                <UserTasks tasks={tasks} data={data} />
+                <UserTasks tasks={tasks} data={data} role={role} />
+              </Route>
+
+              <Route path='/tracking'>
+                <Tracks tasks={tasks} />
               </Route>
             </>
           )}

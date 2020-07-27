@@ -1,96 +1,104 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Users.sass';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../UI/Button';
 import ModalUser from './ModalUser';
 import ModalUserEdit from './ModalUserEdit';
+import parseDate from '../../../utils/parseDate';
 
-export default function User({ dataUser, hash, handleDelete, handleEdit, role }) {
-  const [isOpen, openModal] = useState(false);
-  const [isOpenEdit, editData] = useState(false);
+export default class User extends Component {
+  constructor(props) {
+    super(props);
 
-  const showModal = () => {
+    this.state = {
+      isOpen: false,
+      isOpenEdit: false,
+    };
+  }
+
+  showModal = () => {
+    const { isOpen } = this.state;
+
     if (isOpen) {
-      openModal(false);
+      this.setState({
+        isOpen: false,
+      });
     } else {
-      openModal(true);
+      this.setState({
+        isOpen: true,
+      });
     }
   };
 
-  const showModalEdit = (e) => {
+  showModalEdit = (e) => {
     e.preventDefault();
+    const { isOpenEdit } = this.state;
 
     if (isOpenEdit) {
-      editData(false);
+      this.setState({
+        isOpenEdit: false,
+      });
     } else {
-      editData(true);
+      this.setState({
+        isOpenEdit: true,
+      });
     }
   };
 
-  const parseDate = (date) => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    let dayOfBirthday = date.split('/');
+  render() {
+    const { dataUser, hash, handleDelete, handleEdit, role } = this.props;
+    const { isOpen, isOpenEdit } = this.state;
+    const { firstName, lastName, direction, education, startDate, birthday, id } = dataUser;
+    const AgeInYears = parseDate(birthday);
 
-    dayOfBirthday = `${dayOfBirthday[2]}-${dayOfBirthday[1]}-${dayOfBirthday[0]}`;
-    dayOfBirthday = new Date(Date.parse(dayOfBirthday));
+    return (
+      <>
+        <div className='users__wrapper'>
+          <div className='users__wrapper_item' style={{ fontWeight: 'bold' }}>
+            {hash}
+          </div>
+          <div className='users__wrapper_item'>
+            <button type='button' onClick={this.showModal} className='userInfo'>
+              {`${firstName} ${lastName}`}
+            </button>
+          </div>
+          <div className='users__wrapper_item'>{direction}</div>
+          <div className='users__wrapper_item'>{education}</div>
+          <div className='users__wrapper_item'>{startDate}</div>
+          <div className='users__wrapper_item'>{AgeInYears}</div>
+          <div className='users__wrapper_item'>
+            <div className='users__wrapper_column'>
+              <div className='users__wrapper_row' style={role === 'mentor' ? { marginBottom: '0' } : null}>
+                <Link to={`/users/${id}/tasks`}>
+                  <Button action='showTasks'>Tasks</Button>
+                </Link>
 
-    const dayOfBirthdayNow = new Date(today.getFullYear(), dayOfBirthday.getMonth(), dayOfBirthday.getDate());
-
-    let age = today.getFullYear() - dayOfBirthday.getFullYear();
-
-    if (today < dayOfBirthdayNow) {
-      age -= 1;
-    }
-
-    return age;
-  };
-
-  const { firstName, lastName, direction, education, startDate, birthday, id } = dataUser;
-
-  return (
-    <>
-      <div className='users__wrapper'>
-        <div className='users__wrapper_item' style={{ fontWeight: 'bold' }}>
-          {hash}
-        </div>
-        <div className='users__wrapper_item'>
-          <button type='button' onClick={showModal} className='userInfo'>
-            {`${firstName} ${lastName}`}
-          </button>
-        </div>
-        <div className='users__wrapper_item'>{direction}</div>
-        <div className='users__wrapper_item'>{education}</div>
-        <div className='users__wrapper_item'>{startDate}</div>
-        <div className='users__wrapper_item'>{parseDate(birthday)}</div>
-        <div className='users__wrapper_item'>
-          <div className='users__wrapper_column'>
-            <div className='users__wrapper_row' style={role === 'mentor' ? { marginBottom: '0' } : null}>
-              <Link to={`/users/${id}/tasks`}>
-                <Button action='showTasks'>Tasks</Button>
-              </Link>
-
-              <Link to={`/users/${id}/progress`}>
-                <Button action='showProgress'>Progress</Button>
-              </Link>
-            </div>
-            {role === 'admin' ? (
-              <div className='users__wrapper_row'>
-                <Button action='edit' handleButton={showModalEdit}>
-                  Edit
-                </Button>
-                <Button action='delete' handleButton={() => handleDelete(dataUser.id)}>
-                  Delete
-                </Button>
+                <Link to={`/users/${id}/progress`}>
+                  <Button action='showProgress'>Progress</Button>
+                </Link>
               </div>
-            ) : null}
+              {role === 'admin' ? (
+                <div className='users__wrapper_row'>
+                  <Button action='edit' handleButton={this.showModalEdit}>
+                    Edit
+                  </Button>
+                  <Button action='delete' handleButton={() => handleDelete(dataUser.id)}>
+                    Delete
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
 
-      <ModalUserEdit dataUser={dataUser} isOpen={isOpenEdit} handleButton={showModalEdit} handleEdit={handleEdit} />
-      <ModalUser dataUser={dataUser} isOpen={isOpen} handleButton={showModal} />
-    </>
-  );
+        <ModalUserEdit
+          dataUser={dataUser}
+          isOpen={isOpenEdit}
+          handleButton={this.showModalEdit}
+          handleEdit={handleEdit}
+        />
+        <ModalUser dataUser={dataUser} isOpen={isOpen} handleButton={this.showModal} />
+      </>
+    );
+  }
 }

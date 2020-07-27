@@ -6,18 +6,18 @@ export default class RadioButtons extends Component {
     super(props);
 
     this.state = {
-      value: this.props.value.toLowerCase(),
+      value: this.props.value,
     };
   }
 
   handleRadioChange = (e) => {
     const { changeRadio, name } = this.props;
-    let val = e.target.value;
+    const { value } = e.target;
     this.setState({
-      value: val,
+      value,
     });
 
-    changeRadio(val, name);
+    changeRadio(value, name);
   };
 
   render() {
